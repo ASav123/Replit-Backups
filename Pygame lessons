@@ -1,0 +1,217 @@
+# pygame template
+
+import pygame
+
+
+pygame.init()
+
+WIDTH = 640
+HEIGHT = 480
+SIZE = (WIDTH, HEIGHT)
+
+screen = pygame.display.set_mode(SIZE)
+clock = pygame.time.Clock()
+
+# ---------------------------
+# Initialize global variables
+
+circle_x = 240
+circle_y = 0
+
+# ---------------------------
+
+running = True
+while running:
+    # EVENT HANDLING
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # GAME STATE UPDATES
+    # All game math and comparisons happen here
+    circle_y += 1  
+
+
+    # DRAWING
+    screen.fill((255, 255, 255))  # always the first drawing command
+    pygame.draw.circle(screen, (255, 192, 203), (circle_x, circle_y), 50)
+    # pygame.draw.circle(surface, color, center, radius)
+    pygame.draw.aaline(screen, (0, 0, 0), (50, 50), (circle_x, circle_y), 10)
+
+    # Must be the last two lines
+    # of the game loop
+    pygame.display.flip()
+    clock.tick(30)
+    #---------------------------
+
+
+# pygame.quit()
+
+
+
+
+
+
+# pygame template
+
+import pygame
+
+
+pygame.init()
+
+WIDTH = 640
+HEIGHT = 480
+SIZE = (WIDTH, HEIGHT)
+
+screen = pygame.display.set_mode(SIZE)
+clock = pygame.time.Clock()
+
+# ---------------------------
+# Initialize global variables
+
+circle_x = 200
+circle_y = 200
+
+# ---------------------------
+
+running = True
+while running:
+    # EVENT HANDLING
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # GAME STATE UPDATES
+    # All game math and comparisons happen here
+
+    # 0 - 270 by 30
+    count = 0
+    while count <= 270:
+        count += 30
+
+
+
+    # DRAWING
+    screen.fill((255, 255, 255))  # always the first drawing command
+
+    # Health Bar
+    # Outer
+    outer_x = 20
+    outer_y = 20
+    outer_width = 300
+    outer_height = 50
+    pygame.draw.rect(screen, (0, 0, 0), (outer_x, outer_y, outer_width, outer_height))
+
+    # Innter
+    max_health = 100
+    health = 50
+    health_persentage = health / max_health
+    padding = 5
+    inner_x = outer_x + padding
+    inner_y = outer_y + padding
+    inner_width = (outer_width - padding * 2) * health_persentage
+    inner_height = outer_height - padding * 2
+    pygame.draw.rect(screen, (225, 0, 0), (inner_x, inner_y, inner_width, inner_height))
+
+    # Must be the last two lines
+    # of the game loop
+    pygame.display.flip()
+    clock.tick(30)
+    #---------------------------
+
+
+pygame.quit()
+
+
+
+
+
+
+
+
+# pygame template
+
+import pygame
+
+import random
+import math
+pygame.init()
+
+WIDTH = 640
+HEIGHT = 480
+SIZE = (WIDTH, HEIGHT)
+
+screen = pygame.display.set_mode(SIZE)
+clock = pygame.time.Clock()
+
+# ---------------------------
+# Initialize global variables
+
+
+# ---------------------------
+
+running = True
+while running:
+    # EVENT HANDLING
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # GAME STATE UPDATES
+    # All game math and comparisons happen here
+    health = 100
+    max_health = 100
+    health += random.randrange(-10, 0,)
+
+    # while health >= 0:
+    #     health = max_health
+
+
+
+    # DRAWING
+    screen.fill((220, 220, 220))  # always the first drawing command
+
+    # Inner
+    health_percentage = health / max_health
+    start_x = 10
+    x_bar = 0 + start_x
+    y_bar = 0
+    w_bar = 20
+    h_bar = 40
+    spacing = 10
+    number_of_bars = 10 * health_percentage
+    x_window = 100
+    num1 = 0
+    num2 = 100
+    while num1 <= num2:
+        pygame.draw.circle(screen, (0, 0, 255), (x_window, 100), 8)
+        x_window += 20
+        num1 += 20
+
+
+    while x_window <= x_window + (((radius_window * 2) + spacing_window) * number_of_windows):
+        pygame.draw.circle(screen, (0, 0, 0), (x_window, 275), radius_window)
+        x_window += (radius_window * 2) + spacing_window
+
+    # while x_bar <= ((w_bar + spacing) * number_of_bars) + start_x:
+    #     y_bar = math.cos(30) + 50 + 50
+    #     pygame.draw.rect(screen, (225, 0, 0), (x_bar, y_bar, w_bar, h_bar))
+    #     x_bar += w_bar + spacing
+
+
+
+    # 1. draw ONE single rectangle, at 0, 0 with a width of 20
+    # 2. CREATE LOOP TO COUNT FROM 0 to 270 inclusive, counting by
+    #    the width plus the spacing.
+    #    that is your x value
+    # 4. in the loop draw a rectangle using that x value.
+
+
+    # Must be the last two lines
+    # of the game loop
+    pygame.display.flip()
+    clock.tick(30)
+    #---------------------------
+
+
+pygame.quit()
