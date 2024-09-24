@@ -1,0 +1,285 @@
+# print("Hello, World!")
+# # ^Outputting text
+# print(4 + 5)
+# print("4 + 5")
+# # Anything in quotes is a string
+# print("Test.", end="")
+# print("Hello")
+
+# age = 16  #store intigers
+# print(age)
+# age = 1
+# print(age)
+
+# name = "Anthony"  #store strings
+# price = 1.99  #float numbers
+# cost_per_year = age / price
+# print(cost_per_year)
+
+# Calculator code
+# apples = int(input("How many apples are you buying?: "))
+apples = input("How many apples?")
+apples = int(apples)
+price = float(input("What is the price?"))
+# MUST USE FLOAT FOR DECIMALS WITH INPUT
+# price = 0.97
+subtotal = apples * price
+TAX_MULTIPLYER = 0.13
+# Uppercase show a constaonat (Do not change)
+tax = subtotal * 0.13
+total = subtotal + tax
+total = round(total,2)
+print(f"Your total is: ${total}")
+print("$",total)
+
+
+# print(total, end="")
+# print("$")
+
+print("Enter your name")
+name = input("here: ")
+print(name)
+
+print('Hello!')
+last_name = input('Last Name: ')
+first_name = input('First Name: ')
+full_name = first_name + ' ' + last_name
+
+print(full_name, end= "")
+print(" Is cool")
+
+PI = 3.14
+print(type(PI))
+print(12912353 / 2)
+
+fact = "True"
+fact = bool(fact)
+print(type(fact))
+
+
+count = 0
+while count < 5:
+    print("Hye")
+    count += 1
+print("This is {}".format("Peter"))
+
+num = 12
+num *= 3
+# Simpler form of num = num * 3
+print(num)
+
+print(abs(-12))
+# Absolute Value
+print(round(20.98675, 2))
+
+print(round(12.1789, 1))
+# Round rounds an intiger, but adding , 1 is 1 space after the decimal
+
+digit = 4.568
+# multiplyer = float(input("How much to multiply it by?"))
+# digit *= multiplyer
+# print("Your final anwser is:", round(digit, 2))
+
+print("")
+
+print(f"Hello, I am {2023 - 2001} years old")
+print("{} {}, {} {}:{} {}".format(17, "September", 2023, 10, 55, "am"))
+print("This " + "is " + "very " + "good " + "code.", end="")
+print(" Thank you!")
+print("")
+print("This is a class 0f 33")
+print(f"If they would work in groups of 4 there would be {33 // 4} groups")
+print(f"There would be a smaller group of {33 % 4} students")
+print("this is the last group: {},{},{}and {}".format("dave ", "john ",
+                                                    "steve ", "alex"))
+print("This is a funny number: {}".format(num))
+print("What is {}".format("going on?"))
+
+name = "Anthony"
+last_name = "Savritski"
+print(name + ", " + last_name[0])
+
+
+# When using % if the first number is less than the second, the anwser will be the first one
+
+print("Hello" + " " + "Test")
+
+amount = 123456
+amount = str(amount)
+amount = amount.replace("1", "2")
+print(amount)
+
+# test = input("What is your favourit number?:")
+# test = str(test)
+# print(test)
+
+print("""Hello this is'''' the best
+fdg
+
+snfj
+text""")
+text = "I Am Coder"
+print("Hello".upper())
+print("Hello" + ", " + text)
+print(len(text))
+
+print(text.lower())
+
+# len shows character in a mesage
+print(text[0])
+# acessing a certain index in a string
+print(text[0:4:])
+# This includes the 0 index but only up to the 4 index
+# You can leave the first index blank to print from the front and the same with the back
+keyboard = "qwertyuiopasdfghjklzxcvbnm"
+print(keyboard[0:25:3])
+# The 2 at the end prints every other can also be every third with 3
+print(text.upper())
+# upper/lower
+print(text.count("Coder"))
+# counts how many of something there are
+print(text.find("Am"))
+# Says which index it starts at, if nothing it will say "-1"
+
+message = ("Hello Everyone")
+message = message.replace("Hello", "I am amogus")
+print(message)
+# replaces words
+
+hello = "Hi"
+name = "Anthony"
+greetings = f"{hello}, {name} I am alive!"
+# you can also run comands like .upper() within
+# or greetings = hello + ' ' + name
+print(greetings[0:9].upper())
+
+print(dir(int))
+# # Gives lists of commands
+# print(help(str))
+# # Gives what commands do
+numbers = input("Give me two one digit numbers seperated by a space:")
+x = numbers[0]
+y = numbers[2]
+print(f"({x},{y})")
+
+digits = 938471219129
+digits = str(digits)
+print(digits.count("9"))
+
+
+
+
+# people_at_party = int(input("How many people are at the party?:"))
+# people_at_party *= 2
+# pizza_to_order = people_at_party / 8
+# print(f"You need to order {round(pizza_to_order)} pizza's")
+
+name = input("Enter name: ")
+age = int(input("Enter your age"))
+fav_num = float(input("Enter a cool number: "))
+print(f"Hello {name}")
+print(f"Your name is {len(name)}")
+print("There are {} 't'".format(name.lower().count("t")))
+print(name.find("t"))
+print(name.lower().replace("t", "."))
+print(f"Your fav num -20 is {round(fav_num - 20, 1)}")
+fav_num_string = str(fav_num)
+print(f"The first number of your fav num is {fav_num_string[0]}")
+print(name + " " + str(age) + " " + str(fav_num))
+
+
+name = "Dave"
+print("Hello"[0])
+print(4%11)
+
+
+# If statments
+age = 18
+if age >= 18:
+    print("you can vote")
+print("after if")
+
+# IF ELIF ELSE
+age = 55
+if age >= 55:
+    print("one")
+    ticket_price = 5
+elif age >= 18 and age < 25:
+    print("two")
+    ticket_price = 10
+elif age < 18:
+    print("four")
+    ticket_price = 0
+else:
+    print("three")
+    ticket_price = 15
+
+print(ticket_price)
+# ELIF meanins if all else above is flase then check this
+# ELSE meanins if everything is flase them just do this
+
+# AND/OR
+# 6 and taller than 100cm
+age = 6
+height = 100
+if age >= 6 and height >= 100:
+    print("you can ride")
+elif age < 6 or height < 100:
+    print("you cannot ride")
+# Or you can just say
+# else:
+#     print("you cannot ride")
+
+# age1 = int(input("What is your age?:"))
+life = age >= 64
+if life is True:
+    print("you are retired")
+elif life is False:
+    print("You are a student or working")
+
+team_a_points = 25
+team_a_wins = 16
+
+team_b_points = 20
+team_b_wins = 16
+
+if team_a_points > team_b_points:
+    print("Team A wins!")
+    team_a_wins += 1
+elif team_b_points > team_a_points:
+    print("Team B wins!")
+    team_b_wins += 1
+else:
+    print("Tie.")
+
+if team_a_wins > team_b_wins:
+    print("Team A has more wins than Team B.")
+elif team_b_wins > team_a_wins:
+    print("Team B has more wins than Team A.")
+else:
+    print("Both Teams A and B have the same number of wins.")
+
+
+
+
+age = 100
+fav_num = 20
+name = "Dave"
+friend = True
+if friend is True:
+    if name.lower() == "dave" and fav_num >= 10 or name.lower() == "dave" and age == 18:
+        print("Whats up Dave we have things in commun")
+    elif name.lower() == "dave" and age <10:
+        print("sup")
+    elif name.lower() == "dave":
+        print("Dave is that you?")
+    elif age == 18 and fav_num % 5 == 0:
+        print("We are friends now")
+    else:
+        print("No")
+elif friend is False and name.lower() == "dave":
+    print("You can be my friend.")
+else:
+    print("Bye")
+
+
