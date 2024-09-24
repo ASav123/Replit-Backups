@@ -944,3 +944,42 @@ print(f"({x}, {y})")
 # Input: Input x and y seperated by a space
 # Prossesing: get the input. extract the x and the y and put it in the format
 # Output: A cordinate in a proper format (x, y)
+
+
+
+# small = int(input("How many small dog treats will Barley recive?: "))
+# medium = int(input("How many medium dog treats will Barley recive?: "))
+# large = int(input("How many large dog treats will Barley recive?: "))
+
+# happiness = (1 * small) + (2 * medium) + (3 * large)
+
+# print("")
+
+# mood = 'sad'
+# if happiness >= 10:
+#     mood = 'happy'
+# else:
+#     mood = 'sad'
+
+# An empty string is Flase in python
+print("Go to the [s]tore or go [h]ome?")
+
+choice = input(">").lower()
+
+# if "home" in choice:
+#     print("You are home")
+
+if choice == "home" or choice == "go home":
+    print("You go home")
+else:
+    print("You dont go home")
+
+# Options
+choice = input()
+
+# .....
+# Another option
+choice = input()
+
+# You can keep on overwriting it and useing new ones
+
