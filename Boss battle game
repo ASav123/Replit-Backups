@@ -1,0 +1,229 @@
+import random
+
+location = "room"
+have_key = False
+strength_potion = False
+health_potion = False
+sword = False
+bow = False
+health = 100
+zombie = 100
+while True:
+    if location == "room":
+        print("You are in a room")
+        print("")
+
+        print("[1] Door")
+        print("[2] Drawer")
+        
+        choice = input("Where do you go?")
+        
+        
+        if choice == "1":
+            print("You chose the door.")
+            location = "door"
+        elif choice == "2":
+            print("You chose the drawr.")
+            location = "drawer"
+        else:
+            print("Error!")
+    elif location == "door" and have_key is False:
+        print("You are at the door it is locked.")
+        input("ENTER to go back")
+        location = "room"
+    elif location == "door" and have_key is True:
+                leave = input("Do you open the door? [Y] or [N]")
+                if leave == "Y":
+                    print("You leave the room.")
+                    break
+                    location = "hall"
+                elif leave == "N":
+                    print("You go back to the room.")
+                    location = "room"
+    elif location == "drawer" and have_key is False:
+        print("You are at the drawer.")
+        take = input("You find a key do you pick it up? [Y] or [N]: ")
+        if take == "Y":
+            print("You pick up a key.")
+            print("You go back the the room.")
+            location = "room"
+            have_key = True
+        elif take == "N":
+            print("You ignore the key and go back to the room:")
+            location = "room"
+    elif location == "drawer" and have_key is True:
+        print("You are at the drawer.")
+        print("There is nothing to.")
+        print("You go back to the room.")
+        location = "room"
+location = "hall"
+
+while True:
+# Weapon selection
+    if location == "hall" and bow is False and sword is False:
+        print("You are in the hall.")
+        print("")
+        print("Suddenly boss music starts playing.")
+        print("You find a sowrd and bow which do you chose? ")
+        print("[1] Bow")
+        print("[2] Sword")
+        choice = input(">")
+        if choice == "1":
+            print("You choce the Bow.")
+            bow = True
+            location = "potions"
+        elif choice == "2":
+            print("You choce the Sword.")
+            sword = True
+            location = "potions"
+        else:
+            print("Please chose a weapon.")
+            input("ENTER to return")
+            location = "hall"
+
+# Potion selection
+    if location == "potions" and health_potion is False and strength_potion is False:
+        print("You find a red potion and a purple potion which one do you take?")
+        print("[1] Red Potion")
+        print("[2] Purple Potion")
+        choice = input("Which potion do you pick?")
+        if choice == "1":
+            print("You pick the red potion.")
+            health_potion = True
+            location = "boss"
+        elif choice == "2":
+            print("You chose the purple potion.")
+            strength_potion = True
+            location = "boss"
+        else:
+            print("Please chose a potion")
+            input("ENTER to return")
+            location = "potions"
+        print("")
+        print("Boss music starts playing louder.")
+        print("")
+        print("Suddenly the room lights up and a giant zombie appears.")
+        print("")
+        print(f"Your health is {health}")
+
+# Attack code
+    if location == "boss" and health_potion is True or strength_potion is True:
+        print("")
+        print("[1] Attack")
+        print("[2] Drink Potion")
+        choice = input("What do you chose?: ")
+        if choice == "1" and bow is True:
+            damage = random.randrange(30, 50)
+            chance_to_miss = damage % 2
+            if chance_to_miss == 1:
+                print("Your attack missed.")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+            else:
+                print(f"You shoot the zombie for {damage}.")
+                zombie -= damage
+                print("")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+        elif choice == "1" and sword is True:
+            damage = random.randrange(20, 40)
+            chance_to_miss = damage % 3
+            if chance_to_miss == 1:
+                print("Your attack missed.")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+            else:
+                print(f"Your sowrd hits the zombie for {damage}.")
+                zombie -= damage
+                print("")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+
+# Potion code
+        elif choice == "2" and health_potion is True:
+            print("The potion turns out to be a health potion.")
+            if health >= 80 and health <= 100:
+                print("You heal back to full health.")
+                health = 100
+                health_potion = False
+                location = "boss"
+            else:
+                print("You gain 20 health.")
+                health += 20
+                health_potion = False
+                location = "boss"
+        elif choice == "2" and strength_potion is True:
+            print("The potion turn out to be a strength potion.")
+            print("You are not stonger.")
+            zombie -= 20
+            strength_potion = False
+            location = "boss"
+        else:
+            print("You miss your turn and do nothing.")
+            zombie_damage = random.randrange(10, 30)
+            print(f"The zombie damges you for {zombie_damage}.")
+            health -= zombie_damage
+            location = "boss"
+
+# No potion attack code
+    elif location == "boss" and health_potion is False or strength_potion is False:
+        print("")
+        print("[1] Attack")
+        choice = input("What do you chose?: ")
+        if choice == "1" and bow is True:
+            damage = random.randrange(30, 50)
+            chance_to_miss = damage % 2
+            if chance_to_miss == 1:
+                print("Your attack missed.")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+            else:
+                print(f"You shoot the zombie for {damage}.")
+                zombie -= damage
+                print("")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+        elif choice == "1" and sword is True:
+            damage = random.randrange(20, 40)
+            chance_to_miss = damage % 3
+            if chance_to_miss == 1:
+                print("Your attack missed.")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+            else:
+                print(f"Your sowrd hits the zombie for {damage}.")
+                zombie -= damage
+                print("")
+                zombie_damage = random.randrange(10, 30)
+                print(f"The zombie damges you for {zombie_damage}.")
+                health -= zombie_damage
+                location = "boss"
+
+# Game endings
+    if health <= 0:
+        print("")
+        print("You die.")
+        print("Game over!")
+        break
+    if zombie <= 0:
+        print("")
+        print("The zombie Died.")
+        print("You win!")
+        break
+        
+        
+      
