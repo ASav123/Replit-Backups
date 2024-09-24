@@ -1,0 +1,946 @@
+# Super Memory Super Student
+# Memory techniques
+
+
+    
+"""
+link system -> long list of items
+feldspar, quartz, topaz, corumdum, dimand -> rocks
+
+    form links by remebering the first link
+    Two words, picutre them interacting togteht in a strange way
+    Exaggerated image
+
+"""
+
+# 1. Function that takes no arguments. It's called say_hello and returns nothing, just prints 'hello'.
+def say_hello():
+    print("hello")
+
+if __name__ == "__main__":
+    say_hello()
+# 2. a sum function that takes two integers and returns the sum 
+def nums_sum(num1: float, num2: float) -> float:
+    sum = num1 + num2
+    return sum
+
+if __name__ == "__main__":
+    answer = nums_sum(3, 5)
+    print(answer)
+
+# 3. an 'average' function that takes two numbers and returns the average.
+def nums_average(num1: float, num2: float) -> float:
+    average = (num1 + num2) / 2
+    return average
+
+if __name__ == "__main__":
+    answer = nums_average(5, 7)
+    print(answer)
+
+# 4. A function that takes a first name and a last name and formats it to "{last_name}, {first_name}"" (returns a String).
+def format_name(first: str, last: str) -> str:
+    formated = f"{last}, {first}"
+    return formated
+
+if __name__ == "__main__":
+    name = format_name("Dave", "Matthew")
+    print(name)
+# 5. A function that takes a first name, last name, graduation year, student number and returns those three items together in a list.
+def student_info(first: str, last: str, year: int, num: int) -> list:
+    format = []
+    format.append(first)
+    format.append(last)
+    format.append(year)
+    format.append(num)
+    return format
+
+if __name__ == "__main__":
+    info = student_info("Dave", "Matthew", 2007, 114562)
+    print(info)
+    
+# 6. A function that takes an integer and returns whether it is above 18 or not (Boolean).
+def above_18(num: int) -> bool:
+    outcome = num > 18
+    return outcome
+
+if __name__ == "__main__":
+    result = above_18(1)
+    print(result)
+
+def cool_fucntion(name: str) -> bool:
+    result = False
+    if name.lower() == "dave":
+        result = True
+    return result
+
+if __name__ == "__main__":
+    print(cool_fucntion("Dave"))
+
+
+print("[1] -> Hello")
+print("[2] -> hi")
+while True:
+    try:
+        choice = int(input("Enter: "))
+        if choice not in [1, 2]:
+            raise ValueError("Invalid Input")
+        break
+    except ValueError:
+        print("Invalid Input")
+
+print("Done")
+
+
+def main():
+    first = input("Enter first name: ")
+    last = input("Enter last name: ")
+    full = first + " " + last
+    formated = format_name(first, last)
+    print(formated)
+
+    if determine_fbi(full):
+        print("You are an FBI operative")
+    else:
+        print("You are not an FBI operative")
+
+
+def format_name(first: str, last: str) -> str:
+    return f"{first[0]}, {last}"
+
+def determine_fbi(name: str) -> bool:
+    count = 0
+    for char in name:
+        if char.lower() == "e":
+            count += 1
+
+    return count == 3
+
+
+
+if __name__ == "__main__":
+    main()
+
+import random
+
+# 1.
+numbers = []
+for _ in range(100):
+    numbers.append(random.randrange(1, 101))
+
+count = 0
+for num in numbers:
+    if num == 3:
+        count += 1
+print(count)
+
+if numbers[0] == 10:
+    numbers[0] = 1
+
+# 2.
+words = []
+while True:
+    word = input("Enter stuff: ")
+    if word.lower() == "stop":
+        break
+    words.append(word)
+print(words)
+
+# 3.
+distances = [4, 6, 2, -4]
+posistion = 0
+for distance in distances:
+    posistion += distance
+print(posistion)
+
+# 4.
+ice_cream_top_10 = [...]
+my_fave_flav = "Parlimes and Cream"
+found = False
+for flavour in ice_cream_top_10:
+    if flavour == my_fave_flav:
+        found = True
+        break
+if not found:
+    ice_cream_top_10[9] = my_fave_flav
+
+# 5.
+persons_of_intrests = [...]
+
+for i in range(len(persons_of_intrests)):
+    full_name = persons_of_intrests[i]
+    split_name = full_name.split(" ")
+    first = split_name[0]
+    last = split_name[1]
+    if first[0] == "A" and last[0] == "A":
+        redacted = ""
+        for char in full_name:
+            if char == " ":
+
+
+# 5 part 2
+marks_input = input("Enter mark seperated by a space: ")
+marks = []
+for marks_str in marks_input.split(" "):
+    marks.append(int(mark_str))
+for mark in marks:
+highest = 0
+lowest = 100
+    if mark > highest:
+                redacted += " "
+            else:
+                redacted += "-"
+        persons_of_intrests[i] = redacted
+        persons_of_intrests[i] = "-" * len(full_name)
+
+
+
+import test
+import math
+
+# # def calculator(num1: int, num2: int) -> int:
+# #     return num1 * num2
+
+# # if __name__ == "__main__":
+# #     answer = calculator(2, 3)
+# #     print(answer)
+
+# # if __name__ == "__main__":
+# #     answer = test.sum(4, 5)
+# #     print(answer)
+
+# # print(math.pi)
+# # print(math.sqrt(9))
+
+# # Practice Test
+# # 1.
+# def say_hello_world():
+#     print("Hello World")
+
+# say_hello_world()
+
+# def main():
+#     print("Mian")
+
+# if __name__ == "__main__":
+#     main()
+
+# if __name__ == "__main__":
+#     addition = test.sum(6, 7)
+#     print(addition)
+
+
+# all input and printing in here:
+# Keep main at the top
+# ask for stuff and call functions
+# ****all prints and inputs take place in the main function ******
+#     This is because if its imported to protect imported code
+# Mr Gallo Soulution of #1:
+def main():
+    length = float(input("Enter rectangle length: "))
+    width = float(input("Enter rectangle width: "))
+    area = rectangle_area(length, width)
+    print(area)
+
+    radius = float(input("Enter radius: "))
+    area = circle_circumference(radius)
+    print(area)
+
+
+def rectangle_area(length: float, width: float) -> float:
+    return length * width
+
+
+def circle_circumference(radius: float) -> float:
+    return radius * math.pi * 2
+
+
+if __name__ == "__main__":
+    main()
+
+
+# 2.
+def main():
+    num1 = float(input("Enter a number: "))
+    num2 = float(input("Enter another number: "))
+    sum = num_add(num1, num2)
+    product = num_multiply(num1, num2)
+    print(f"The sum is {round(sum, 2)}")
+    print(f"The product is {round(product, 2)}")
+
+
+def num_add(num1: float, num2: float) -> float:
+    return num1 + num2
+
+
+def num_multiply(num1: float, num2: float) -> float:
+    return num1 * num2
+
+
+# if __name__ == "__main__":
+#     main()
+
+
+# Create a function to take two numbers and RETURN their sum.
+def sum(num1: float, num2: float) -> float:
+    return num1 + num2
+
+
+if __name__ == "__main__":
+    number = sum(23599348.2352, 1231.132352)
+    print(number)
+
+
+def main():
+    while True:
+        print("[1] Add keychains to order.")
+        print("[2] Remove keychains.")
+        print("[3] View order.")
+        print("[4] Checkout.")
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            add_keychain()
+        elif choice == "2":
+            remove_keychain()
+        elif choice == "3":
+            view_order()
+        elif choice == "4":
+            checkout()
+            break
+
+
+def add_keychain():
+    print("ADD KEYCHAIN")
+
+
+def remove_keychain():
+    print("REMOVE KEYCHAIN")
+
+
+def view_order():
+    print("VIEW ORDER")
+
+
+def checkout():
+    print("CHECKOUT")
+
+
+if __name__ == "__main__":
+    main()
+def a_function():
+    input("Enter to skip: ")
+
+
+# if __name__ == "__main__":
+a_function()
+
+# def sum(num1: int, num2: int) -> int:
+#     return num1 + num2
+
+# if __name__ == "__main__":
+#     answer = sum(3, 4)
+#     print(answer)
+
+# name = "Jeff"
+
+# def set_name():
+#     global name
+#     name = "David"
+
+# def say_hello():
+#     print(f"Hello {name}")
+
+# name = "Dave"
+# say_hello()
+# set_name()
+# print(name)
+import random
+
+
+names = ["Rob Martin", "Andrew Ansfe", "Desdfd Afdgd"]
+for i, name in enumerate(names):
+    names_split = name.split(" ")
+    first_name = names_split[0]
+    last_name = names_split[1]
+    if first_name[0].lower() == "a" and last_name[0].lower() == "a":
+        names[i] = ""
+        for char in range(len(name)):
+            names[i] += "-"
+print(names)
+
+
+
+
+
+print(type(45))
+if type(45) == int:
+    print("Yay")
+
+numbers = []
+count = 0
+while count < 100:
+    num = random.randrange(1, 101)
+    numbers.append(num)
+    count += 1
+print(numbers)
+
+location = []
+num_find = int(input("Enter a number to find: "))
+for i, num in enumerate(numbers):
+    if num == num_find:
+        location.append(i)
+
+if len(location) > 0:
+    print(f"{len(location)} {num_find}s have been found at the following index's", end=": ")
+    for index in location:
+        print(index, end=", ")
+print(" ")
+
+
+# Lists Quiz Soulutions
+# 1.
+my_list = []
+my_list.append(1)
+my_list.append(1)
+my_list.append(1)
+print(my_list[0])
+print(my_list[1])
+print(my_list[2])
+# 2.
+# original = [...]
+# only_a = []
+# for word in original:
+#     first_char = word[0].lower()
+#     if first_char == "a":
+#         only_a.append(word)
+# 3.
+numbers = []
+while len(numbers) < 5:
+    num = int(input("Enter a number: "))
+    if num >= 0:
+        numbers.append(num)
+
+
+
+
+# Lists Practice Test Soulutions
+# 1.
+numbers = []
+for _ in range(3):
+    num = int(input("Enter a number:"))
+    numbers.append(num)
+# 2.
+numbers = []
+for _ in range(100):
+    num = random.randrange(1, 11)
+    numbers.append(num)
+print(numbers)
+
+count = 0
+locations = []
+for i, num in enumerate(numbers):
+    if num == 3:
+        count += 1
+        locations.append(i)
+print("test", end=", ")
+print(f"There are {count} threes at index: {locations}")
+
+# 3.
+sentance = input("Enter a sentance: ")
+split_sentance = sentance.split(" ")
+long_words = []
+for word in split_sentance:
+    if len(word) > 3:
+        long_words.append(word)
+
+# 4.
+cities = []
+while True:
+    city = input("Enter a city: ").lower()
+    if city == "stop":
+        break
+
+    unique = True
+    for existing_city in cities:
+        if city == existing_city:
+            unique = False
+            break 
+
+    if unique is True:
+        cities.append(city)
+
+    # elif city not in cities:
+    #     cities.append(city)
+    # else:
+    #     print("City is already in the list.")
+
+
+
+
+
+
+string = "Apple 34 Word Book 1.2"
+string_list = string.split(" ")
+for i, thing in enumerate(string.split(" ")):
+    print(f"Index {i} has {thing}")
+    if thing.lower() == "book":
+        string_list[i] = "Harry Potter"
+print(string_list)
+
+coords = "x=45,y=56 x=5,y-10"
+final = []
+for position in coords.split(" "):
+    set = []
+    x_y = position.split(",")
+
+    x_vlaue = x_y[0]
+    x = int(x_vlaue[2:])
+
+    y_vlaue = x_y[1]
+    y = int(y_vlaue[2:])
+
+    set.append(x)
+    set.append(y)
+    final.append(set)
+print(final)
+
+# 1.
+numbers = []
+for _ in range(3):
+    num = float(input("Enter a number: "))
+    numbers.append(num)
+print(numbers)
+
+# 2
+numbers = []
+for _ in range(100):
+    numbers.append(random.randrange(1, 11))
+print(numbers)
+count = 0
+for num in numbers:
+    if num == 3:
+        count += 1
+print(f"There are {count} 3s in the list")
+
+# 3.
+sentance = input("Enter a sentance: ")
+sentance_final = []
+for word in sentance.split(" "):
+    if len(word) > 3:
+        sentance_final.append(word)
+print(f"The final sentance is: {sentance_final}")
+
+# 4.
+cities = []
+while True:
+    print(cities)
+    city = input("Enter a city or 'stop' to stop: ").lower()
+    if city == "stop":
+        break
+    elif city not in cities:
+        cities.append(city)
+    else:
+        print("This city is on the list.")
+
+import random
+
+# # Create loop to print out numbers 5-30
+# num = 5
+# while num <= 30:
+#     print(num)
+#     num += 1
+
+# # Calcuate the sum of the numbers 10-20
+# count = 10
+# total = 0
+# while count <= 20:
+#     total += count
+#     count += 1
+# print(total)
+
+# # Calculate the sum fo 5 numbers entered by the user
+# count = 1
+# total = 0
+# while count <= 5:
+#     total += int(input("Input number:"))
+#     count += 1
+# print(total)
+
+# x = random.randrange(1,101)
+# print(x)
+
+pepers = 0
+count = 1
+total = 0
+pepers = int(input("How many pepers do you use?: "))
+while count <= pepers:
+    type = input("What type of peper?: ").capitalize()
+    if type == "Poblano":
+        total += 1500
+    elif type == "Mirasol":
+        total += 6000
+    elif type == "Serrano":
+        total += 15500
+    elif type == "Cayenne":
+        total += 40000
+    elif type == "Thai":
+        total += 75000
+    elif type == "Habanero":
+        total += 125000
+    else:
+        print("Invalid peper")
+        continue
+    count += 1
+print(f"Total heat: {total}")
+
+
+count = 1
+total = 0
+max = int(input("What should the number go up too?: "))
+while count <= max:
+    if count % 3 == 0:
+        total += count
+    count += 1
+print("Loop is done")
+print(f"The total is {total}")
+
+
+count = 1
+total = 0
+nums = int(input('How many numbers will you multiply?: '))
+while count <= nums:
+    number = int(input(f"What is the {count} number?: "))
+    if count == 1:
+        total += number
+    else:
+        total *= number
+    count += 1
+print(f"The final anwser is: {total}")
+
+import random
+text = "qwertyuiop"
+print(text[-3:])
+# PASSWORD GAME
+
+# enter = input("Enter the password?: ")
+# while True:
+#     if "!" in enter or "@" in enter or "#" in enter or "$" in enter or "%" in enter or "^" in enter or "&" in enter or "*" in enter or "(" in enter or ")" in enter:
+#         if "1" in enter or "2" in enter or "3" in enter or "4" in enter or "5" in enter or "6" in enter or "7" in enter or "8" in enter or "9" in enter or "0" in enter:
+#             if "Microsoft" in enter or "Apple" in enter or "Pepsi" in enter:
+#                 if "25" in enter:
+#                     if len(enter) < 10:
+#                         if len(enter) > 6:
+#                             print("Thank you for selecting a password with our simple passowrd setup!")
+#                         else:
+#                             print("Password too short.")
+#                     else:
+#                         print("Password too long.")
+#                 else:
+#                     print("Please include the amwser to this equation: (3 + 1/2 * 4) ^ 2")
+#             else:
+#                 print("Please include one of our sponsors: Microsoft, Pepsi or Apple")
+#         else:
+#             print("Please include a number.")
+#     else:
+#         print("Please include a special character.")
+#     print("")
+#     enter = input("Enter the password?: ")
+
+
+
+
+
+# DICE GAME
+
+# die1 = 0
+# die2 = 1
+# while die1 != die2:
+#     die1 = random.randrange(1,7)
+#     die2 = random.randrange(1,7)
+#     print(f"DIE #1: {die1}")
+#     print(f"DIE #2: {die2}")
+#     total = die1 + die2
+#     print(f"The total is {total}")
+#     print("")
+#     if die1 == die2:
+#         print("They are the same!")
+
+# attempt = 0
+# num = random.randrange(1,101)
+# guess = int(input("What is your guess?: "))
+# while num != guess:
+#     if guess > num:
+#         print("You guessed too high!")
+#         attempt += 1
+#         guess = int(input("What is your guess?: "))
+#     elif guess < num:
+#         print("You guesed too low!")
+#         attempt += 1
+#         guess = int(input("What is your guess?: "))
+#     if attempt == 5:
+#         print("You ran out of guesses!")
+#         print(f"{num} was the number!")
+#         break
+# if num == guess:
+#     print("You guessed right!")
+
+
+
+# Number Guessing Game With Counter
+
+# count = 0
+# number = random.randrange(1,11)
+# guess = int(input("What is your guess (1-10)?: "))
+# while number != guess:
+#     count += 1
+#     guess = int(input("Wrong. Guess Again:"))
+# if guess == number:
+#     print("Nice you guessed correct.")
+#     print(f"It took you {count} tries")
+
+
+# # Test Practice
+
+# # 1. ask for a start, end and what number to count by, print out numbers
+
+# start = int(input("What number to start at?: "))
+# end = int(input("What number to end at?: "))
+# counter = int(input("What number to count by?: "))
+# # while start <= end:
+# #     print(start)
+# #     start += counter
+
+# for num in range(start, end + 1, counter):
+#     print(num)
+
+# # 2. Ask for prices if they are negative they will break the loop
+
+# total = 0
+# while True:
+#     print(f"Current total: ${round(total, 2)}")
+#     price = float(input("What is the price?: "))
+#     if price < 0:
+#         break
+#     total += price
+# print(f"The grand total is ${round(total, 2)}")
+
+
+# # 3. 
+# x = 0
+# y = 0
+# print("You are the dot in the bottom. Navigate to the star in the top right.")
+# print(" [][][]*")
+# print(" [][][]")
+# print(" [][][]")
+# print(".[][][]")
+# while True:
+#     print("[1] Up")
+#     print("[2] Down")
+#     print("[3] Right")
+#     print("[4] Left")
+#     print("[5] Quit")
+#     print(f"Current location: ({x}, {y})")
+#     if x == 3 and y == 4:
+#         print("You win!")
+#         break
+#     elif x < 0 or y < 0 or x > 3 or y > 4:
+#         print("You fall off and die")
+#         break
+#     choice = int(input("Where do you go?:"))
+#     if choice == 1:
+#         y += 1
+#     elif choice == 2:
+#         y -= 1
+#     elif choice == 3:
+#         x += 1
+#     elif choice == 4:
+#         x -= 1
+#     elif choice == 5:
+#         break
+#     else:
+#         print("Invlaid option")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# thing = ["Hello", "potato", "brown"]
+# for x in thing:
+#     print(x)
+
+
+# new = ""
+# for x in thing:
+#     if x == "potato":
+#         new += "Amogus"
+#         print(new)
+#         print("A potato has been found.")
+#     print(x)
+
+
+word = "Hello there, this has some vowells"
+empty = ""
+for char in word:
+    if char in "aeiou":
+        empty += "-"
+        continue
+    else:
+        empty += char
+
+print(empty)
+
+# import random
+# print("Enter shots for the Apples below")
+# apple_three = int(input("How many three-pointers?:"))
+# apple_two = int(input("How many two pointers?:"))
+# apple_one = int(input("How many one pointers?:"))
+
+# print("Enter shots for the Bananas below")
+# banana_three = int(input("How many three-pointers?:"))
+# banana_two = int(input("How many two pointers?:"))
+# banana_one = int(input("How many one pointers?:"))
+
+# banana_ponts = (3 * banana_three) + (2 * banana_two) + (banana_one)
+# apple_points = (3 * apple_three) + (2 * apple_two) + (apple_one)
+
+# if apple_points > banana_ponts:
+#     print("A")
+# elif apple_points < banana_ponts:
+#     print("B")
+# else:
+#     print("T")
+
+
+# weight = int(input("What is your weight?: "))
+# print("Planets: 1.Mars, 2.Venus and 3.Jupiter")
+# planet = int(input("Which planet are you on?: "))
+
+# if planet == 1:
+#     weight *= 0.39
+# elif planet == 2:
+#     weight *= 0.78
+# elif planet == 3:
+#     weight *= 2.65
+
+# print(f"Your final weight is {round(weight)}")
+
+
+# age = int(input("What is your age?: "))
+# name = input("What is your name?: ")
+# gender = input("What is your gender M or F?: ")
+
+# front =""
+
+# if gender == "F" and age > 20:
+#     married = input("Are you married Y or N?: ")
+#     if married == "Y":
+#         front = "Mrs."
+#     else:
+#         front = "Ms."
+# elif gender == "M" and age > 20:
+#     front = "Mr."
+
+# print(f"Hello {front} {name}.")
+
+
+import random
+random.seed(400)
+number = random.randrange(1,11)
+# guess = int(input("Guess a number 1-10: "))
+
+# if number == guess:
+#     print("You guessed the correct number!")
+# else:
+#     print(f"The number I was thinking of was {number}")
+
+
+print(number)
+
+# 1
+name = input("Enter your name: ")
+age = input("Enter your age: ")
+print(f"Hello {name}, you are {age} years old.")
+# 2
+test1 = int(input("Enter test 1 mark: "))
+test2 = int(input("Enter test 2 mark: "))
+avrage = ((test1 + test2) / 2)
+print(f"Your avrage is: {avrage}")
+# 3
+NUM_FRIENDS = 5
+num = int(input("Enter a number: "))
+person_it = num % NUM_FRIENDS
+print(f"Friend {person_it} is it")
+# 4
+point1 = input("Enter poit 1: ")
+point2 = input("Enter poit 2: ")
+x1 = int(point1[0])
+y1 = int(point1[2])
+x2 = int(point2[0])
+y2 = int(point2[2])
+rise = y2 - y1
+run = x2 - x1
+print(f"Rise: {rise}")
+print(f"Run: {run}")
+
+
+"""
+1. 
+print(3 + 4)
+Put spaces between operators but not after print
+2.
+// is floor division, only gives the wole number
+% is called MODULUS, the remainder
+10 % 11 = 10
+3. 
+4.
+"""
+name = "Anthony"
+
+print(name.upper())
+# The upper method gives a new string and does not change the variable
+
+print(name[2])
+
+print(name[0:2])
+
+last = "Savritski"
+print(f"{last}, {name[0]}.")
+
+year_of_birth = 2007
+AGE_AT_GRAD = 18
+year_of_graduation = year_of_birth + AGE_AT_GRAD
+# When using square brakets you can use [-2:0], -2 means start from the second last character
+# You can also use % by 100 to get the last two
+last_two = year_of_graduation % 100
+print(f"{name.upper()}.{last}{last_two}@ycdsbk12.ca")
+# print(name + "." + last + str(last_two) + "@ycdsbk12.ca")
+# Must convert number to string when using "+"
+
+# 5.
+
+full_name = input("Enter your full name: ")
+department = input("Enter your department: ")
+print("==================")
+print(full_name.upper())
+print("------------------")
+print(department.capitalize())
+print("==================")
+
+# 6.
+
+xy = input("Enter a number for x and y:")
+x = xy[0]
+y = xy[-1]
+print(f"({x}, {y})")
+# IPO chart
+# Input: Input x and y seperated by a space
+# Prossesing: get the input. extract the x and the y and put it in the format
+# Output: A cordinate in a proper format (x, y)
