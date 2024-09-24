@@ -1024,4 +1024,329 @@ for x in range(7):
 print(numbers)
 
 
+import random
+import homework
+import math
 
+# print(math.pi)
+# print(math.sqrt(9))
+
+# def test() -> bool:
+#     return True
+# print(test())
+
+def amogus(num1: float, num2: float) -> bool:
+    sum = num1 + num2
+    is_greater_than_10 = sum > 10
+    return is_greater_than_10
+
+if __name__ == "__main__":
+
+    print(amogus(2, 5))
+
+
+
+def main():
+    test = homework.month_name(4)
+    print(test)
+
+if __name__ == "__main__":
+    main()
+
+# number = random.randrange(0, 11)
+# # randrange is a function
+# if number > 3:
+#     print("nmber is greater than 3")
+#     # print is a function
+# # Brackets help show what is a function 
+# #     ***Call*** (run) a function ***** imporant term
+# #     Things we give to functions are ***arguments*****
+# #     Sometimes functions give back stuff
+# #     **Return Value*** the tings a function returnss somehtimes it is None or anything
+# #     You give functions information like a min  and a max or what to print
+
+# '''
+# 1. Create a function to print out Hello, World
+def hello_world():
+    print("Hello World")
+
+if __name__ == "__main__":
+    hello_world()
+# 2. Create a fu:nction to take someones name and print out "Hello, {name}".
+def hello_name(name: str):
+    print(f"Hello {name}")
+
+if __name__ == "__main__":
+    name = input("Enter name: ")
+    hello_name(name)
+
+# 3. Create a function to take a number and RETURN its square.
+def square(num: float) -> float:
+    diffrent_num = num ** 2
+    return diffrent_num
+
+if __name__ == "__main__":
+    num = float(input("Enter a number: "))
+    square_number = square(num)
+    print(f"The square is {square_number}")
+# 4. Create a function to take two numbers and RETURN their sum.
+def sum(num1: float, num2: float) -> float:
+    final_sum = num1 + num2
+    return final_sum
+
+if __name__ == "__main__":
+    numbers = input("Enter two numbers seperated by a space")
+    numbers_split = numbers.split(" ")
+    final_sum = sum(float(numbers_split[0]), float(numbers_split[1]))
+    print(f"The sum is {final_sum}")
+# 5. Create a function to take a first and a last name and RETURN it in the format "Last, First".
+def format_name(first: str, last: str) -> str:
+    name_final = f"{last}, {first}"
+    return name_final
+
+if __name__ == "__main__":
+    first = input("Enter a first name: ")
+    last = input("Enter a last name: ")
+    final_name = format_name(first, last)
+    print(f"Name formated: {final_name}")
+# '''
+
+# # General function
+# def function_name():
+#     print("Hello from the function.")
+
+# print("Hello from the main program.")
+# function_name()
+# # Gereral function for ***Paremiter**** variable (You input stuff) stuff to "define"
+# #     Paramiter is value you define, you define them when you define the function
+# #  "n; int" lets the user know that it should be an intiger
+# #   |            Parameter variable
+# #   |            |  Paramater variable type
+# #   V            V  V
+# def print_number(n: int):
+#     print(n)
+# # General function for return
+# def give_me_the_number_3():
+#     return 3
+
+# three = give_me_the_number_3()
+# print(three)
+
+# # 1.
+# def print_hello_world():
+#     print("Hello World!")
+
+# print_hello_world()
+
+# # 2.
+# def say_hello(name: str):
+#     print(f"Hello, {name}")
+
+# say_hello("Anthony")
+# name = input("Enter your name: ")
+# say_hello(name)
+
+# # 3.
+# def square_number(num: int) -> int:
+#     return num ** 2
+
+# number = square_number(3)
+# print(number)
+
+# # 4.
+# def sum_numbers(num1: int, num2: int) -> int:
+#     return num1 + num2
+
+# numbers = sum_numbers(3,4)
+# print(numbers)
+
+# # 5.
+# def format_name(first: str, last: str) -> str: #Peramiters
+#     return f"{last}, {first}"
+
+# name = format_name("Anthony","Savritski") #Arguments sent
+# print(name)
+
+IMPORT_TAX = 0.13
+
+# 6.1
+# main function
+def main():
+    print("Hello World")
+    print("This is a regular python program.")
+    print("That is all.")
+
+if __name__ == "__main__":
+    main()
+
+def main():
+    pass 
+    # Pass just makes sure there is no error is you leave it blank
+
+def main():
+    print("Welcome to the chair calcualtor.")
+    tables = int(input("Enter tables: "))
+    chairs_per_table = int(input("Enter chairs per table: "))
+    chairs = tables * chairs_per_table
+    print(f"You will need {chairs} chairs.")
+
+if __name__ == "__main__":
+    main()
+
+# def chairs(tables: int, chairs_per_table: int) -> int:
+#     chairs = tables * chairs_per_table
+#     print(f"You will need {chairs} chairs.")
+
+# print(chairs(3, 6))
+# # soulution = chairs(4, 8)
+# # print(soulution)
+
+import test
+test.main()
+# Can call functions from other files.
+
+# 6.2
+
+def add(a: int, b: int): # a and b are the peramiters, they defince what is required
+    print(f"a is given as {a}")
+    print(f"b is given as {b}")
+    total = a + b
+    print(total)
+
+if __name__ == "__main__":
+    add(6, 7) #theses are the argumets that which are given to the function
+
+def say_hi(name: str):
+    print(f"Hello, {name}")
+
+if __name__ == "__main__":
+    say_hi("Anthony")
+
+# 6.3
+def main():
+    my_print = print("Hello")
+    name = input("Ehter your name: ")
+    num = random.randrange(1, 11)
+
+    print(my_print)
+    print(name)
+    print(num)
+
+if __name__ == "__main__":
+    main()
+
+
+def plus_five(num: int) -> int:
+    return num + 5 #return is not a function do not add brackets
+
+def main():
+    result = plus_five(10)
+    print(result)
+
+if __name__ == "__main__":
+    main()
+
+# ***Pure Functions***
+# 3 rules of creating functions:
+# Take arguments
+# Return a value
+# No print/input
+#     Try to keep and inputs and prining in the main function
+
+def count_nums(nums: list[int]) -> int:
+    evens = 0
+    for num in nums:
+        if num % 2 == 0:
+            evens += 1
+
+    return evens
+
+result = count_nums([2, 1, 2, 3, 4])
+print(result)
+# 6.4
+# Varibales outside a function are global, variables inside are local
+mark = 49
+def automatic_100():
+    global mark
+    mark = 100
+
+print(mark)
+
+if __name__ == "__main__":
+    automatic_100()
+print(f"Thew new mark is {mark}")
+
+# def add(num1: int, num2: int) -> int:
+#     total = num1 + num2
+#     test()
+#     return total
+
+# def test():
+#     print(total)
+
+# if __name__ == "__main__":
+#     add(4,5)
+    # print(total) #This is a big mistake since you cannot acess the local variable
+
+
+# Expections:
+
+
+while True:
+    try:
+        print("[1] Attack")
+        print("[2] Do Nothing \n")
+        choice = int(input("Enter some numbers: "))
+        if choice not in [1, 2]:
+            print("Test")
+            raise ValueError("Invalid Menu Option!")
+
+    except ValueError:
+        print("Invlaid Input!")
+
+    if choice == 1:
+        print("You Attack!")
+    elif choice == 2:
+        print("You Do Nothing!")
+    else:
+        break
+        # To make code below it readable
+
+
+
+# FROM THE PDF:
+# print("Enter 1 to equip your sword")
+# print("Enter 2 to do nothing")
+# while True:
+#     try:
+#         choice = int(input("choice:"))
+#         if choice not in [1, 2]:
+#             raise ValueError("Invalid menu option") 
+#         break
+#     except ValueError:
+#         print("Oops. That isn't a valid menu option.")
+
+# if choice == 1:
+#     print("You equip your sword.")
+# elif choice == 2:
+#     print("You do nothing")
+
+# "Hello"[5]
+# abs("2")
+# [1, 2, 3][100]
+# print "Blah")
+# int("hi")
+# print("hi")
+# int("hi)
+
+int(5)
+
+
+point_1= str(input())
+point_2= str(input())
+
+rise_calc= int(point_1[2]) - int(point_2[2])
+run_calc= int(point_1[0]) - int(point_2[0])
+
+print(f"Rise: {rise_calc}")
+print(f"Run: {run_calc}")
