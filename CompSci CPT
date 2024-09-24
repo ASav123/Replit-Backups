@@ -1,0 +1,4180 @@
+import random
+import os
+import drawings
+import time
+import sys
+import json
+from colorama import Fore, Back, Style
+
+# Hayden, coloring sprites
+water = f"{Fore.BLUE}≈{Style.RESET_ALL}"
+chest = f"{Fore.YELLOW}▣{Style.RESET_ALL}"
+
+# michael
+# player stats
+player_hp = 100
+player_strength = 40
+player_agility = 20
+
+# Weapon Stats/ Attack
+WEAPON_STATS = [50, 30, 80, 70]
+sword = [WEAPON_STATS[0], "sword"]
+dagger = [WEAPON_STATS[1], "dagger"]
+greatsword = [WEAPON_STATS[2], "greatsword"]
+dual_blades = [WEAPON_STATS[3], "dual blades"]
+player_weapon = sword[0]
+player_weapon_name = sword[1]
+
+# total stats
+player_atk = round((1 + player_strength / 150) * player_weapon)
+player_info = [player_hp, player_strength, player_agility, player_atk]
+
+doubloons = 0  # currency
+
+# if you buy a weapon your weapon equipped is now that weapon
+player_inventory = [doubloons, player_weapon_name, player_weapon]
+
+# enemy stats
+BASE_HP_MONSTERS = 150
+BASE_DMG_MONSTERS = 10
+
+skeleton_hp = BASE_HP_MONSTERS
+skeleton_dmg = BASE_DMG_MONSTERS
+
+barracuda_hp = BASE_HP_MONSTERS + 60
+barracuda_dmg = BASE_DMG_MONSTERS + 5
+
+zombie_hp = BASE_HP_MONSTERS + 50
+zombie_dmg = BASE_DMG_MONSTERS + 10
+
+cthulhu_hp = BASE_HP_MONSTERS + 450
+cthulhu_dmg = BASE_DMG_MONSTERS + 50
+
+skeleton = [skeleton_hp, skeleton_dmg, "skeleton fish"]
+zombie = [zombie_hp, zombie_dmg, "zombie shark"]
+barracuda = [barracuda_hp, barracuda_dmg, "barracuda swarm"]
+cthulhu = [cthulhu_hp, cthulhu_dmg, "cthulhu"]
+
+enemy_info = []
+
+# Hayden
+# potions held
+red_pot = 0
+green_pot = 0
+blue_pot = 0
+# potion names
+red_pot_name = "Red Potion"
+green_pot_name = "Green Potion"
+blue_pot_name = "Blue Potion"
+# Variables for effect it does
+red = ""
+green = ""
+blue = ""
+
+# Determines Red potion effect
+red = random.randint(1, 3)
+
+if red == 1:
+    red = "Healing Potion"
+
+elif red == 2:
+    red = "Strength Potion"
+
+elif red == 3:
+    red = "Agility Potion"
+
+
+# Determines Green potion but relooping if red potion uses the effect
+while True:
+    green = random.randint(1, 3)
+
+    if green == 1 and red != "Healing Potion":
+        green = "Healing Potion"
+        break
+
+    elif green == 2 and red != "Strength Potion":
+        green = "Strength Potion"
+        break
+
+    elif green == 3 and red != "Agility Potion":
+        green = "Agility Potion"
+        break
+
+# Determines Blue potion but relooping if red or green potion uses the effect
+while True:
+    blue = random.randint(1, 3)
+
+    if blue == 1 and red != "Healing Potion" and green != "Healing Potion":
+        blue = "Healing Potion"
+        break
+
+    elif blue == 2 and red != "Strength Potion" and green != "Strength Potion":
+        blue = "Strength Potion"
+        break
+
+    elif blue == 3 and red != "Agility Potion" and green != "Agility Potion":
+        blue = "Agility Potion"
+        break
+
+
+def red_pot_use():
+
+    """Hayden
+    Using red potion function"""
+
+    global red
+    global pot_name_list
+    global pot_held_list
+    global player_info
+
+    if pot_held_list[0] > 0:
+        print("Red pot used!")
+        pot_held_list[0] -= 1
+
+        game_stats[4]["potions"] = pot_held_list
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+        if red == "Healing Potion":
+            print("You healed yourself!")
+            player_info[0] += 50
+            print("Your health is now", player_info[0])
+            health_limit()
+
+        elif red == "Strength Potion":
+            print("You feel stronger!")
+            player_info[1] += 50
+            print("Your strength is now", player_info[1])
+
+        elif red == "Agility Potion":
+            print("You feel more agile!")
+            player_info[2] += 30
+            print("Your agility is now", player_info[2])
+
+        print("You now know the effect the of the Red potion")
+
+        pot_name_list[0] = red
+        game_stats[4]["player_info"] = player_info
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+    else:
+        print(f"You don't have any {pot_name_list[0]}s!")
+
+
+def green_pot_use():
+    """Using green potion function"""
+    global green
+    global pot_name_list
+    global pot_held_list
+    global player_info
+
+    if pot_held_list[1] > 0:
+        print("Green pot used!")
+
+        pot_held_list[1] -= 1
+        game_stats[4]["potions"] = pot_held_list
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+        if green == "Healing Potion":
+            print("You healed yourself!")
+            player_info[0] += 50
+            print("Your health is now", player_info[0])
+            health_limit()
+
+        elif green == "Strength Potion":
+            print("You feel stronger!")
+            player_info[1] += 50
+            print("Your strength is now", player_info[1])
+
+        elif green == "Agility Potion":
+            print("You feel more agile!")
+            player_info[2] += 30
+            print("Your agility is now", player_info[2])
+
+        print("You now know the effect the of the Green potion")
+
+        pot_name_list[1] = green
+        game_stats[4]["player_info"] = player_info
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+    else:
+        print(f"You don't have any {pot_name_list[1]}s!")
+
+
+def blue_pot_use():
+    """Using blue potion function"""
+
+    global blue
+    global pot_name_list
+    global pot_held_list
+    global player_info
+
+    if pot_held_list[2] > 0:
+        print("Blue pot used!")
+
+        pot_held_list[2] -= 1
+        game_stats[4]["potions"] = pot_held_list
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+        if blue == "Healing Potion":
+            print("You healed yourself!")
+            player_info[0] += 50
+            print("Your health is now", player_info[0])
+            health_limit()
+
+        elif blue == "Strength Potion":
+            print("You feel stronger!")
+            player_info[1] += 50
+            print("Your strength is now", player_info[1])
+
+        elif blue == "Agility Potion":
+            print("You feel more agile!")
+            player_info[2] += 30
+            print("Your agility is now", player_info[2])
+
+        print("You now know the effect the of the Blue potion")
+        pot_name_list[2] = blue
+        game_stats[4]["player_info"] = player_info
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+    else:
+        print(f"You dont any more {pot_name_list[2]}s!")
+
+
+def open_chest():
+    """Hayden
+    Open Chest Function"""
+    global pot_held_list
+    global player_inventory
+    potion = random.randrange(1, 4)
+
+    if potion == 1:
+        pot_held_list[0] += 1
+
+        print("You found a Red Potion!")
+
+    elif potion == 2:
+        pot_held_list[1] += 1
+
+        print("You found a Green Potion!")
+
+    elif potion == 3:
+        pot_held_list[2] += 1
+
+        print("You found a Blue Potion!")
+
+    game_stats[4]["potions"] = pot_held_list
+    with open("game.json", "w") as f:
+        json.dump(game_stats, f, indent=4)
+
+    """ Money randomizer by Michael"""
+    currency = random.randrange(1, 101)
+    print(f"You found {currency} doubloons!")
+    player_inventory[0] += currency
+
+pot_name_list = [red_pot_name, green_pot_name, blue_pot_name]
+pot_held_list = [red_pot, green_pot, blue_pot]
+
+
+
+# Anthony
+# default main menu options
+location_menu = "main"
+chosen_difficulty = "open Ocean"
+chosen_class = "rogue"
+
+# difficulty modifiers
+SHALLOWS = [160, 8]
+OPEN_OCEAN = [200, 10]
+ABYSS = [300, 15]
+HADES = [500, 25]
+
+# Classes
+ROGUE = [25, 60]
+BERSERKER = [100, 15]
+KNIGHT = [75, 45]
+
+# settimgs
+choice = None
+class_choice = None
+difficulty_choice = None
+drawing_print = None
+
+# puzzles and keys
+trap_room_puzzle = True
+water_room_puzzle = True
+boss_room_key = False
+trapdoor_quest = False
+hat = False
+easter_egg = False
+quest_repeat = False
+
+# visible enimies
+trap_room_enemy_death = False
+trap_room_visible_enemy = True
+
+water_room_enemy_death = False
+water_room_visible_enemy = True
+
+# enemy deaths
+trap_room_enemy_death = False
+trap_quest_enemy_death = False
+water_room_enemy_death = False
+
+# Hayden
+# Chests
+chest_1 = False
+chest_2 = False
+chest_3 = False
+chest_4 = False
+chest_5 = False
+chest_6 = False
+chest_7 = False
+chest_8 = False
+chest_9 = False
+chest_10 = False
+
+#uthman
+def clear_console():
+    """ clears the console after each input """
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+
+# michael
+def health_limit():
+    global player_hp
+    if player_hp >= 200:
+        player_hp = 200
+        print(f"Exceeded HP limit, max HP has been reached: {player_hp}")
+
+
+def check_health_death(player_list: list) -> bool:
+    """check health and death if needed"""
+    if player_list[0] <= 0:
+        return True
+    else:
+        return False
+
+
+def death_screen():
+    """#death screen"""
+    global location_menu
+
+    death = check_health_death(player_info)
+
+    if death == True:
+        player_info[0] = 0
+        game_stats[4]["player_info"] = player_info
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+        print("You died.")
+        print()
+        print("Restart?")
+        print("[1] Yes")
+        print("[2] No")
+        try:
+            choice = int(input(""))
+            if choice not in [1, 2]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid Option!")
+
+        if choice == 1:
+            location_menu = "main"
+            reset_stats()
+        else:
+            print("Thank you for playing.")
+            exit()
+
+
+def reset_stats():
+    """reset player stats afer death"""
+    global player_info
+    global player_inventory
+    global doubloons
+
+    player_hp = 100
+    player_strength = 40
+    player_agility = 20
+
+    WEAPON_STATS = [50, 30, 80, 70]
+    sword = WEAPON_STATS[0]
+    dagger = WEAPON_STATS[1]
+    greatsword = WEAPON_STATS[2]
+    dual_blades = WEAPON_STATS[3]
+    player_weapon = sword
+    player_weapon_name = "sword"
+
+    player_atk = round((1 + player_strength / 200) * player_weapon)
+    player_info = [player_hp, player_strength, player_agility, player_atk]
+
+    doubloons = 0
+    player_inventory = [doubloons, player_weapon_name]
+
+    game_stats = [
+        {
+            "class": [
+                75,
+                45
+            ],
+            "difficulty": [
+                200,
+                10
+            ]
+        },
+        {
+            "room": "spawn",
+            "location": [
+                1,
+                0
+            ]
+        },
+        {
+            "trap_room_puzzle": True,
+            "water_room_puzzle": True,
+            "boss_room_key": False,
+            "trapdoor_quest": False,
+            "quest_repeat": False
+        },
+        {
+            "trap_room_enemy_death": False,
+            "trap_room_visible_enemy": True,
+            "water_room_enemy_death": False,
+            "water_room_visible_enemy": True
+        },
+        {
+            "player_info": [
+                100,
+                40,
+                20,
+                63
+            ],
+            "doubloons": 0,
+            "potions": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "chest_1": False,
+            "chest_2": False,
+            "chest_3": False,
+            "chest_4": False
+        }
+    ]
+
+    with open("game.json", "r") as f:
+        game_stats_load = json.load(f)
+
+    game_stats[0]["class"] = game_stats_load[0]["class"]
+    game_stats[0]["difficulty"] = game_stats_load[0]["difficulty"]
+    game_stats[1]["location"] = [1, 0]
+
+    with open("game.json", "w") as f:
+        json.dump(game_stats, f, indent=4)
+
+    with open("game.json", "r") as f:
+        game_stats_load = json.load(f)
+
+    location = game_stats_load[1]["location"]
+    location_menu == None
+
+def player_stats(players_list: list):
+    """acesses player stats from the player_stats list"""
+    p_health = players_list[0]
+    p_strength = players_list[1]
+    p_agility = players_list[2]
+    p_attack = players_list[3]
+
+    print(f"PLAYER HP: {p_health}")
+    print(f"PLAYER ATK: {p_attack}")
+    print(f"PLAYER STRENGTH: {p_strength}")
+    print(f"PLAYER AGILITY: {p_agility}")
+
+
+def game_stats():
+    "prints out the player's difficulty and class choices"
+    global difficulty
+    global class_choice
+    print(f"Difficulty: {difficulty}")
+    print(f"Class: {class_choice}")
+
+
+# Anthony
+# Functions to return the map
+def spawn_drawing_print(location: list[int]) -> str:
+    """takes location and prints out player trap room map"""
+    if location == [0, 0]:
+        drawing_print = drawings.spawn00
+    elif location == [0, 1]:
+        drawing_print = drawings.spawn01
+    elif location == [1, 0]:
+        drawing_print = drawings.spawn10
+    elif location == [2, 0]:
+        drawing_print = drawings.spawn20
+    elif location == [3, 0]:
+        drawing_print = drawings.spawn30
+    elif location == [4, 0]:
+        drawing_print = drawings.spawn40
+    elif location == [1, 1]:
+        drawing_print = drawings.spawn11
+    elif location == [2, 1]:
+        drawing_print = drawings.spawn21
+    elif location == [3, 1]:
+        drawing_print = drawings.spawn31
+    return drawing_print
+
+
+def hall_drawings_print(location: list[int]) -> str:
+    """takes location and prints out player hall map"""
+    if location == [5, 0]:
+        drawing_print = drawings.hall50
+    elif location == [0, 1]:
+        drawing_print = drawings.hall01
+    elif location == [1, 1]:
+        drawing_print = drawings.hall11
+    elif location == [2, 1]:
+        drawing_print = drawings.hall21
+    elif location == [3, 1]:
+        drawing_print = drawings.hall31
+    elif location == [4, 1]:
+        drawing_print = drawings.hall41
+    elif location == [5, 1]:
+        drawing_print = drawings.hall51
+    elif location == [6, 1]:
+        drawing_print = drawings.hall61
+    elif location == [2, 2]:
+        drawing_print = drawings.hall22
+    elif location == [6, 2]:
+        drawing_print = drawings.hall62
+    elif location == [6, 3]:
+        drawing_print = drawings.hall63
+    elif location == [7, 3]:
+        drawing_print = drawings.hall73
+    return drawing_print
+
+
+def traproom_drawings_print(location: list[int]) -> str:
+    """takes location and prints out player trap room map"""
+    if location == [5, 0]:
+        drawing_print = drawings.traproom50
+    elif location == [5, 1]:
+        drawing_print = drawings.traproom51
+    elif location == [4, 1]:
+        drawing_print = drawings.traproom41
+    elif location == [3, 1]:
+        drawing_print = drawings.traproom31
+    elif location == [2, 1]:
+        drawing_print = drawings.traproom21
+    elif location == [1, 1]:
+        drawing_print = drawings.traproom11
+    elif location == [0, 1]:
+        drawing_print = drawings.traproom01
+    elif location == [0, 2]:
+        drawing_print = drawings.traproom02
+    elif location == [1, 2]:
+        drawing_print = drawings.traproom12
+    elif location == [2, 2]:
+        drawing_print = drawings.traproom22
+    elif location == [3, 2]:
+        drawing_print = drawings.traproom32
+    elif location == [0, 3]:
+        drawing_print = drawings.traproom03
+    elif location == [1, 3]:
+        drawing_print = drawings.traproom13
+    elif location == [2, 3]:
+        drawing_print = drawings.traproom23
+    elif location == [3, 3]:
+        drawing_print = drawings.traproom33
+
+    if trapdoor_quest is True and trap_room_visible_enemy is False:
+        return (drawing_print.replace("0", "O")).replace("¿", "░")
+    elif trapdoor_quest is True:
+        return drawing_print.replace("0", "O")
+    elif trap_room_visible_enemy is False:
+        return drawing_print.replace("¿", "░")
+    else:
+        return drawing_print
+
+
+def waterroom_drawings_print(location: list[int]) -> str:
+    """takes location and prints out player water room location"""
+    if location == [0, 0]:
+        drawing_print = drawings.waterroom00
+    elif location == [1, 0]:
+        drawing_print = drawings.waterroom10
+    elif location == [2, 0]:
+        drawing_print = drawings.waterroom20
+    elif location == [3, 0]:
+        drawing_print = drawings.waterroom30
+    elif location == [4, 0]:
+        drawing_print = drawings.waterroom40
+    elif location == [5, 0]:
+        drawing_print = drawings.waterroom50
+    elif location == [0, 1]:
+        drawing_print = drawings.waterroom01
+    elif location == [1, 1]:
+        drawing_print = drawings.waterroom11
+    elif location == [2, 1]:
+        drawing_print = drawings.waterroom21
+    elif location == [3, 1]:
+        drawing_print = drawings.waterroom31
+    elif location == [4, 1]:
+        drawing_print = drawings.waterroom41
+    elif location == [5, 1]:
+        drawing_print = drawings.waterroom51
+    elif location == [6, 1]:
+        drawing_print = drawings.waterroom61
+    elif location == [0, 2]:
+        drawing_print = drawings.waterroom02
+    elif location == [1, 2]:
+        drawing_print = drawings.waterroom12
+    elif location == [2, 2]:
+        drawing_print = drawings.waterroom22
+    elif location == [3, 2]:
+        drawing_print = drawings.waterroom32
+    elif location == [4, 2]:
+        drawing_print = drawings.waterroom42
+    elif location == [5, 2]:
+        drawing_print = drawings.waterroom52
+    elif location == [5, 3]:
+        drawing_print = drawings.waterroom53
+    elif location == [5, 4]:
+        drawing_print = drawings.waterroom54
+    if water_room_visible_enemy is False:
+        return drawing_print.replace("¿", "░")
+    else:
+        return drawing_print
+
+
+def npcroom_drawings_print(location: list[int]) -> str:
+    """takes location and prints out player npcroom location"""
+    if location == [0, 1]:
+        drawing_print = drawings.npcroom01
+    elif location == [1, 1]:
+        drawing_print = drawings.npcroom11
+    return drawing_print
+
+
+def bossroom_drawings_print(location: list[int]) -> str:
+    """takes location and prints out player bossroom location"""
+    if location == [1, 0]:
+        drawing_print = drawings.bossroom10
+    elif location == [2, 0]:
+        drawing_print = drawings.bossroom20
+    elif location == [3, 0]:
+        drawing_print = drawings.bossroom30
+    elif location == [4, 0]:
+        drawing_print = drawings.bossroom40
+    elif location == [5, 0]:
+        drawing_print = drawings.bossroom50
+    elif location == [6, 0]:
+        drawing_print = drawings.bossroom60
+    elif location == [7, 0]:
+        drawing_print = drawings.bossroom70
+    elif location == [8, 0]:
+        drawing_print = drawings.bossroom80
+    elif location == [9, 0]:
+        drawing_print = drawings.bossroom90
+    elif location == [0, 1]:
+        drawing_print = drawings.bossroom01
+    elif location == [1, 1]:
+        drawing_print = drawings.bossroom11
+    elif location == [2, 1]:
+        drawing_print = drawings.bossroom21
+    elif location == [3, 1]:
+        drawing_print = drawings.bossroom31
+    elif location == [4, 1]:
+        drawing_print = drawings.bossroom41
+    elif location == [5, 1]:
+        drawing_print = drawings.bossroom51
+    elif location == [6, 1]:
+        drawing_print = drawings.bossroom61
+    elif location == [7, 1]:
+        drawing_print = drawings.bossroom71
+    elif location == [8, 1]:
+        drawing_print = drawings.bossroom81
+    elif location == [9, 1]:
+        drawing_print = drawings.bossroom91
+    elif location == [10, 1]:
+        drawing_print = drawings.bossroom101
+    elif location == [1, 2]:
+        drawing_print = drawings.bossroom12
+    elif location == [2, 2]:
+        drawing_print = drawings.bossroom22
+    elif location == [3, 2]:
+        drawing_print = drawings.bossroom32
+    elif location == [4, 2]:
+        drawing_print = drawings.bossroom42
+    elif location == [5, 2]:
+        drawing_print = drawings.bossroom52
+    elif location == [6, 2]:
+        drawing_print = drawings.bossroom62
+    elif location == [7, 2]:
+        drawing_print = drawings.bossroom72
+    elif location == [8, 2]:
+        drawing_print = drawings.bossroom82
+    elif location == [9, 2]:
+        drawing_print = drawings.bossroom92
+    return drawing_print
+
+# Anthony
+def trap_damage(health: float) -> int:
+    """gives out trap damage bassed on player health"""
+    if health <= 20:
+        damage = 3
+    elif health <= 70:
+        damage = 8
+    else:
+        damage = 10
+    return damage
+
+
+def fish_attack(health: float) -> int:
+    """gives out fish damage bassed on player health"""
+    if health <= 30:
+        damage = 1
+    elif health <= 50:
+        damage = 3
+    else:
+        damage = 5
+    return damage
+
+# Hayden
+def inventory():
+    """View Inventory"""
+    global pot_name_list
+    global pot_held_list
+    global player_info
+    global player_inventory
+    global boss_room_key
+    global easter_egg
+
+    print()
+    print()
+    print("Game Paused")
+    print()
+
+    print(f"Player Health: {player_info[0]}")
+    print(f"Player Strength: {player_info[1]}")
+    print(f"Player Agility: {player_info[2]}")
+    print(f"Player Attack: {player_info[3]}")
+
+    print()
+
+    print(pot_name_list[0] + ": " + str(pot_held_list[0]))
+    print(pot_name_list[1] + ": " + str(pot_held_list[1]))
+    print(pot_name_list[2] + ": " + str(pot_held_list[2]))
+
+    print()
+
+    print(str(player_inventory[0]) + " Doubloons")
+    print("Weapon: " + str(player_inventory[1]))
+
+    print()
+
+    if hat == True:
+        print("Hat")
+
+    if boss_room_key == True:
+        print("Shiny Key")
+
+    print()
+
+    print("[1] Use Potion")
+    print("[2] Exit Game")
+    print("[3] Unpause")
+
+    try:
+        choice = int(input("Choice: "))
+        if choice not in [1, 2, 3, 2007]:
+            raise ValueError("Invalid Option!")
+    except ValueError:
+        print("Invalid option!")
+
+    if choice == 1:
+        print()
+        print(f"[1] {pot_name_list[0]}: {str(pot_held_list[0])}")
+        print(f"[2] {pot_name_list[1]}: {str(pot_held_list[1])}")
+        print(f"[3] {pot_name_list[2]}: {str(pot_held_list[2])}")
+        potion = int(input("Which potion? "))
+
+        if potion == 1:
+            print()
+            red_pot_use()
+
+        elif potion == 2:
+            print()
+            green_pot_use()
+
+        elif potion == 3:
+            print()
+            blue_pot_use()
+
+    elif choice == 2:
+        exit()
+
+    elif choice == 3:
+        pass
+
+    elif choice == 2007 and easter_egg is False:
+        print("You put the hat on!")
+        print("It looks exquisite on your head, and fits your figure quite well.")
+        print("For a second there, you considered not giving the hat back")
+        print("However, you decided against it.")
+        print()
+        input("ENTER To Continue")
+
+        easter_egg = True
+
+        player_info[0] = 200
+        player_info[1] += 50
+        player_info[2] += 50
+        game_stats[4]["player_info"] = player_info
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+        print("You feel healthier, stronger and more agile")
+
+
+
+
+def enemy_determine() -> list:
+    """Michael"""
+    global skeleton
+    global zombie
+    global barracuda
+
+    enemy_determined = False
+
+    while enemy_determined == False:
+        enemy_num = random.randrange(1, 4)
+
+        if enemy_num == 1:
+            return skeleton
+
+        elif enemy_num == 2:
+            return zombie
+
+        else:
+            return barracuda
+
+        enemy_determined = True
+
+
+def combat():
+    """entire combined combat function"""
+    global enemy_info
+    global player_info
+    global location_menu
+    global pot_held_list
+    global pot_name_list
+
+    enemy_hp = enemy_info[0]
+    enemy_atk = enemy_info[1]
+    enemy_name = enemy_info[2]
+
+    p_health = player_info[0]
+    p_strength = player_info[1]
+    p_agility = player_info[2]
+    p_attack = player_info[3]
+
+    turn = "player"
+    enemy_death = False
+
+    print()
+    print(f"You've encountered a {enemy_name}! ")
+    print("What do you do?")
+    print()
+
+    while enemy_death == False:
+
+        if turn == "player":
+            """for dodging"""
+            dodge_chance = random.randrange(1, 151)
+
+            if p_agility > dodge_chance:
+                dodged_atk = True
+
+            else:
+                dodged_atk = False
+
+            """printing the formatting"""
+            enemy_hp_str = f"ENEMY HP: {enemy_hp}"
+            enemy_atk_str = f"ENEMY ATK: {enemy_atk}"
+
+            player_hp_str = f"PLAYER HP: {player_info[0]}"
+            player_atk_str = f"PLAYER ATK: {player_info[3]}"
+            player_strength_str = f"PLAYER STRENGTH: {player_info[1]}"
+            player_agility_str = f"PLAYER AGILITY: {player_info[2]}"
+
+            spacing_1 = 70 - len(enemy_hp_str) - len(player_hp_str)
+            spacing_2 = 70 - len(enemy_atk_str) - len(player_atk_str)
+            spacing_3_left = 70 - len(enemy_name)
+
+            print(spacing_3_left * " " + enemy_name.capitalize())
+            print(
+                f"PLAYER HP: {player_info[0]}"
+                + spacing_1 * " "
+                + f"ENEMY HP: {enemy_hp}"
+            )
+            print(
+                f"PLAYER ATK: {player_info[3]}"
+                + spacing_2 * " "
+                + f"ENEMY ATK: {enemy_atk}"
+            )
+            print(f"PLAYER STRENGTH: {player_info[1]}")
+            print(f"PLAYER AGILITY: {player_info[2]}")
+            print()
+            print("[1] Attack")
+            print("[2] Potion")
+            print("[3] Run away")
+
+            try:
+                option = int(input("Choice: "))
+                if option not in [1, 2, 3]:
+                    raise ValueError("Invalid Option!")
+            except ValueError:
+                print("Invalid option!")
+                """redundancy for just pressing enter"""
+                option = 0
+
+            if option == 1:
+                enemy_hp -= p_attack
+                print()
+                print(f"You attacked the enemy for {p_attack} damage!")
+                enemy_info[0] = enemy_hp
+
+                if enemy_hp <= 0:
+                    print(f"You have defeated {enemy_name}")
+                    enemy_death = True
+                    enemy_info = []
+                    break
+
+                """potion options"""
+            elif option == 2:
+
+                print()
+                print(f"[1] {pot_name_list[0]}: {str(pot_held_list[0])}")
+                print(f"[2] {pot_name_list[1]}: {str(pot_held_list[1])}")
+                print(f"[3] {pot_name_list[2]}: {str(pot_held_list[2])}")
+                potion = int(input("Which potion? "))
+
+                if potion == 1:
+                    print()
+                    red_pot_use()
+
+                elif potion == 2:
+                    print()
+                    green_pot_use()
+
+                elif potion == 3:
+                    print()
+                    blue_pot_use()
+
+                player_atk = round((1 + player_strength / 150) * player_weapon)
+
+                player_info[3] = player_atk
+                game_stats[4]["player_info"] = player_info
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            elif option == 3:
+                print()
+
+                if p_agility > 30:
+                    print("You ran away!")
+                    enemy_death = True
+                    break
+
+                else:
+                    print("You were caught by the enemy, you could not escape.")
+
+            if player_info[0] <= 0:
+                death_screen()
+
+            time.sleep(0.5)
+
+            """redundancy for just pressing enter"""
+            if option != 0:
+                turn = "enemy"
+
+            """enemy's atk turn"""
+        else:
+            print()
+            print(f"The {enemy_name} attacks!")
+            if player_info[1] >= 50 and player_info[2] >= 30:
+                print(
+                    f"You parried the enemy's attack! You dealt {enemy_atk/2} damage to the enemy!"
+                )
+                player_parry = round(enemy_atk / 2)
+                enemy_hp -= player_parry
+                enemy_info[0] = enemy_hp
+
+            elif dodged_atk == True:
+                print("You dodged the enemy's attack!")
+
+            else:
+                print(f"You took {enemy_atk} damage")
+                player_info[0] -= enemy_atk
+                game_stats[4]["player_info"] = player_info
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            if enemy_hp <= 0:
+                print(f"You have defeated {enemy_name}")
+                enemy_death = True
+                enemy_info = []
+                break
+
+            if player_info[0] <= 0:
+                player_info[0] = 0
+                game_stats[4]["player_info"] = player_info
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+                print("You died.")
+                print()
+                print("Restart?")
+                print("[1] Yes")
+                print("[2] No")
+                try:
+                    choice = int(input(""))
+                    if choice not in [1, 2]:
+                        raise ValueError("Invalid Option!")
+                except ValueError:
+                    print("Invalid Option!")
+
+                if choice == 1:
+                    location_menu = "main"
+                    room = None
+                    location = None
+                    reset_stats()
+                    break
+
+                else:
+                    print("Thank you for playing.")
+                    exit()
+
+            turn = "player"
+
+
+# Michael
+# cthulhu fight
+def cthulhu_fight():
+    """final boss fight"""
+    global player_info
+    global player_inventory
+    global location_menu
+    global cthulhu
+
+    """set the boss HP and ATK"""
+    cthulhu_hp = cthulhu[0]
+    cthulhu_dmg = cthulhu[1]
+
+    """boolean variables to start the while ... combat loop and determining whose turn it is"""
+    start_cthulhu_fight = False
+    turn = "boss"
+
+    """body parts broken"""
+    eye_broken = False
+    first_broken = False
+    second_broken = False
+    third_broken = False
+    fourth_broken = False
+    tail_broken = False
+    scream = False
+    heart_broken = False
+    brain_broken = False
+    gill_broken = False
+
+    """HP thresholds that adjust with the difficulty level"""
+    hp_threshold_1 = cthulhu_hp - 100
+    hp_threshold_2 = cthulhu_hp - 150
+    hp_threshold_3 = cthulhu_hp - 200
+    hp_threshold_4 = cthulhu_hp - 250
+    hp_threshold_5 = cthulhu_hp - 300
+    hp_threshold_6 = cthulhu_hp - 350
+    hp_threshold_7 = cthulhu_hp - 400
+    hp_threshold_8 = cthulhu_hp - 450
+    hp_threshold_9 = cthulhu_hp - 550
+    hp_threshold_10 = cthulhu_hp - 570
+
+    """Story:"""
+    print(
+        "You see a mass of flesh and tentacles rise to the skies above,\n its eyes staring down at you with malice and hatred."
+    )
+    time.sleep(3)
+    print(
+        """
+    "GREETINGS, HUMAN," its bellowing voice echoes throughout the ocean. "What is your business in my realm?"
+    """
+    )
+    time.sleep(3)
+    print("You remain silent.")
+    time.sleep(3)
+    print(
+        """
+    "To take revenge? To kill me? You truly are a foolish human."
+    """
+    )
+    time.sleep(3)
+    print(
+        f"The grip on your {player_inventory[1]} tightens, but you feel its madness-inducing powers weakening your body immensely."
+    )
+    time.sleep(3)
+    print()
+    print("    Very well, human. Face your demise.")
+    print()
+    print("The sea god gazes down at you and prepares to fight!.")
+    print()
+    time.sleep(2)
+    input("Any button to continue")
+
+    """Started cthulhu fight"""
+    start_cthulhu_fight = True
+
+    while start_cthulhu_fight == True:
+        """randomize sentence number"""
+        num = random.randrange(1, 10)
+
+        """randomize the word used in the sentence"""
+        determine_word = random.randrange(1, 10)
+
+        """randomize the number used in sentences with first, second, etc."""
+        determine_numth = random.randrange(1, 10)
+
+
+        """randomize the word used in the sentence"""
+        if determine_word == 2:
+            word = "two"
+        elif determine_word == 3:
+            word = "three"
+        elif determine_word == 4:
+            word = "four"
+        elif determine_word == 5:
+            word = "five"
+        elif determine_word == 6:
+            word = "six"
+        elif determine_word == 7:
+            word = "seven"
+        elif determine_word == 8:
+            word = "eight"
+        elif determine_word == 9:
+            word = "nine"
+        elif determine_word == 10:
+            word = "ten"
+
+        """randomize the number used in sentences with first, second, etc."""
+        if determine_numth == 1:
+            num_th = "first"
+        elif determine_numth == 2:
+            num_th = "second"
+        elif determine_numth == 3:
+            num_th = "third"
+        elif determine_numth == 4:
+            num_th = "fourth"
+        elif determine_numth == 5:
+            num_th = "fifth"
+        elif determine_numth == 6:
+            num_th = "sixth"
+        elif determine_numth == 7:
+            num_th = "seventh"
+        elif determine_numth == 8:
+            num_th = "eighth"
+        elif determine_numth == 9:
+            num_th = "ninth"
+        else:
+            num_th = "tenth"
+
+        """combat starts"""
+        if turn == "boss":
+            """cthulhu speaks"""
+            if cthulhu_hp > 0:
+                print()
+                print("HE SPEAKS WITH THE VOICE OF THE DROWNED SOULS OF THE EARTH")
+                print()
+
+            """cthlhu high health"""
+            if cthulhu_hp > 100:
+                if num == 1:
+                    print(
+                        f'"{word.capitalize()} millenia is all it took for me take the best crew of humanity away."'
+                    )
+                elif num == 2:
+                    print(f'"I took {word} hearts of your gods and devoured them."')
+                elif num == 3:
+                    print(
+                        f'"You are nothing in the face of my {word} billion year old body."'
+                    )
+                elif num == 4:
+                    print(f'"There is all but {word} human settlements left."')
+                elif num == 5:
+                    print(
+                        f'"{word.capitalize()} days until the destruction of Earth itself will be commenced."'
+                    )
+                elif num == 6:
+                    print(
+                        f'"The {word} limbed beast will rise above and begin the ritual."'
+                    )
+                elif num == 7:
+                    print(
+                        f'"The {word} pointed star in the runes of ancient Uthlakha will shine above."'
+                    )
+                elif num == 8:
+                    determine_word = 8
+                    determine_numth = 8
+                    print(f'"Your demise is iminent, severed into eight pieces."')
+                elif num == 9:
+                    determine_word = 9
+                    determine_numth = 9
+                    print(
+                        '"You are like a cat of nine lives, living as if you will never die, but you will."'
+                    )
+                else:
+                    print(f"The {num_th} apocalypse will soon begin.")
+
+                """cthulhu low health"""
+            elif cthulhu_hp <= 100 and cthulhu_hp > 0:
+                if num == 1:
+                    print(
+                        f'"In {word.capitalize()} millenia, you are the only living being I have met capable of hurting me."'
+                    )
+                elif num == 2:
+                    print(f'"Even with {word} hearts, you will never defeat me."')
+                elif num == 3:
+                    print(f'"My {word} billion year old body shall not fall so soon!"')
+                elif num == 4:
+                    print(
+                        f'"The {word} human settlements left will soon be destroyed by my inferiors."'
+                    )
+                elif num == 5:
+                    print(
+                        f'"{word.capitalize()} seconds is all it will take for me to finally destroy you."'
+                    )
+                elif num == 6:
+                    print(
+                        f'"The {word} limbed beast obeys me no longer, what has happened to my powers?"'
+                    )
+                elif num == 7:
+                    print(
+                        f'"The {word} pointed star in Uthlakha has ceased to shine, why?"'
+                    )
+                elif num == 8:
+                    print(f'"I will sever you into {word} pieces!"')
+                elif num == 9:
+                    determine_word = 9
+                    determine_numth = 9
+                    print(
+                        '"You are on your last life, human! You shall not live any longer."'
+                    )
+                else:
+                    determine_word = 10
+                    determine_numth = 10
+                    print(
+                        f'"The saviour of this world is not you. Ten thousand years shall pass before another appears."'
+                    )
+
+            """cthulhu died"""
+            if cthulhu_hp <= 0:
+                cthulhu[0] = 0
+                cthulhu_hp = 0
+                print("CTHULHU HAS BEEN DEFEATED.")
+                break
+
+            turn = "player"
+
+        time.sleep(2)
+        print()
+        if turn == "player":
+            try:
+                player_num = int(
+                    input(
+                        "TEN TENTACLES LINE ITS FACE, WHICH SHALL YOU ATTACK? [input a number] "
+                    )
+                )
+                if player_num not in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
+                    raise ValueError("Invalid Option!")
+            except ValueError:
+                print("Invalid Option!")
+            """mechanics for this fight is identifying the correct number in the phrase and putting it as a number"""
+
+            if player_num == determine_word or player_num == determine_numth:
+                cthulhu_hp -= round((player_info[3] * 0.9))
+
+                game_stats[4]["player_info"] = player_info
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+                cthulhu[0] = cthulhu_hp
+                print(
+                    f"The non-euclidian god of the sea takes {round(player_info[3]*0.9)} damage."
+                )
+
+            else:
+                player_info[0] -= cthulhu_dmg * 0.90
+                print(
+                    f"Your meek body takes {cthulhu_dmg} damage, your health is now {round(player_info[0])}"
+                )
+                check_health_death(player_info)
+                death_screen()
+
+            time.sleep(2)
+            print()
+
+            if cthulhu_hp <= hp_threshold_1 and eye_broken == False:
+                print()
+                print(
+                    "Its central eye has been broken, the insides shining like two billion stars."
+                )
+                eye_broken = True
+
+            elif cthulhu_hp <= hp_threshold_2 and first_broken == False:
+                print()
+                print("The first of its four tentacles has been harvested.")
+                first_broken = True
+
+            elif cthulhu_hp <= hp_threshold_3 and second_broken == False:
+                print()
+                print("The second of its four tentacles has been drained of blood.")
+                second_broken = True
+
+            elif cthulhu_hp <= hp_threshold_4 and third_broken == False:
+                print()
+                print("The third of its four tentacles has eaten by the fish below.")
+                third_broken = True
+
+            elif cthulhu_hp <= hp_threshold_5 and fourth_broken == False:
+                print()
+                print("The fourth of its four tentacles has devoured by the ocean.")
+                fourth_broken = True
+
+            elif cthulhu_hp <= hp_threshold_6 and tail_broken == False:
+                print()
+                print(
+                    "Its slime-covered appendage, which appears to be a tail, sinks to the deep, bleeding from the cuts you made."
+                )
+                tail_broken = True
+
+            elif cthulhu_hp <= hp_threshold_7 and scream == False:
+                print()
+                print(
+                    "The deep screams out at its creator, its saviour. It cannot scream back."
+                )
+                scream = True
+
+            elif cthulhu_hp <= hp_threshold_8 and heart_broken == False:
+                print()
+                print(
+                    "You must kill it. It must be stopped at once, reach into its chest and rip out its heart."
+                )
+                heart_broken = True
+
+            elif cthulhu_hp <= hp_threshold_9 and brain_broken == False:
+                print()
+                print(
+                    "The unholy sea god is near its last breath, reach into its mind and remove all thought."
+                )
+                brain_broken = True
+
+            elif cthulhu_hp <= hp_threshold_10 and gill_broken == False:
+                print()
+                print(
+                    "The tentacled beast shall have its gills ripped apart, taking away its life."
+                )
+                gill_broken = True
+        turn = "boss"
+
+#end of game's story
+def end_of_game_story():
+    time.sleep(4)
+    print(
+        "You stand above its tattered body, soaked in the smell of the ocean and blood."
+    )
+    time.sleep(0.05)
+    print(
+        """
+    With your weapon in hand, you look up to the blue sky as the ocean drains away.
+    You can see the vast expanse of land in front of you, dead creatures and monsters
+    of the ocean lay flat on the sand and sea floor."""
+    )
+    time.sleep(3)
+    print(
+        """
+    You carve out the gem in its eye. It shines with the vibrance of millions of galaxies.
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    You collect its still beating heart. It unleashes massive power with every beat.
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    You take its tail. The end of its bone is as sharp as the finest artisan Demascus steel weapons.
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    The gem look shiny and expensive, you wonder if it will fetch a good price with the jewellers.
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    The heart seems to be engraved with something, calling out to you to eat it. You put it in your pocket.
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    The tail is sharper than the blade in your hands. You decide to take it to the blacksmith and see if it
+    can be turned into a weapon. You wonder how this weapoin would perform with its immense strenght and light weight, could this bee the best weapon the world?
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    As you begin walking away a figure shining with the light of a million stars and the darkness of the universe
+    appears in front of you."""
+    )
+    time.sleep(3)
+    print(
+        """
+    "Oh champion of the sea, will you serve us in restoring balance to this world once
+    more, and take control away from those who wish to harm humanity."
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    You ponder, body aching and cold, bathed in the blood of the tentacled god.
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    "I am patient, you need not answer now."
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    You look down at your weapon, and up once more.
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    "What are you? Who, are you?"
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    "You can call me Akhudsa."
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    "What's in it for me?"
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    "We will allow you to live. After all, it is the beginning of the end."
+    """
+    )
+    time.sleep(3)
+    print(
+        """
+    "Doesn't sound like I have a choice."
+    """
+    )
+    time.sleep(3)
+
+    print("Say yes?")
+    print("[1] Yes")
+    print("[2] No")
+    try:
+        choice = int(input(""))
+        if choice not in [1, 2]:
+            raise ValueError("Invalid Option!")
+    except ValueError:
+        print("Invalid Option!")
+
+    if choice == 1:
+        time.sleep(3)
+        print(
+            """
+        It extends its... hand and you follow it into the realm of the gods.
+        """
+        )
+
+    else:
+        time.sleep(3)
+        print(
+            """
+        You feel a burning pain inside you, as you look down, a bright
+        blue flame spreads all over your body as you are incinerated.
+        You can no longer see anything, as you die in pain and agony.
+        """
+        )
+
+# JSON Information
+# Set up my Michael implimented by Anthony
+
+game_stats = [
+        {
+            "class": [
+                75,
+                45
+            ],
+            "difficulty": [
+                200,
+                10
+            ]
+        },
+        {
+            "room": "spawn",
+            "location": [
+                1,
+                0
+            ]
+        },
+        {
+            "trap_room_puzzle": True,
+            "water_room_puzzle": True,
+            "boss_room_key": False,
+            "trapdoor_quest": False,
+            "quest_repeat": False
+        },
+        {
+            "trap_room_enemy_death": False,
+            "trap_room_visible_enemy": True,
+            "water_room_enemy_death": False,
+            "water_room_visible_enemy": True
+        },
+        {
+            "player_info": [
+                100,
+                40,
+                20,
+                63
+            ],
+            "doubloons": 0,
+            "potions": [
+                0,
+                0,
+                0
+            ]
+        },
+        {
+            "chest_1": False,
+            "chest_2": False,
+            "chest_3": False,
+            "chest_4": False
+        }
+    ]
+
+while True:
+    if os.path.isfile("game.json") is False:
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+    with open("game.json", "r") as f:
+        game_stats_load = json.load(f)
+
+    # -----main menu-----
+    if location_menu == "main":
+        # Anthony
+        # JSON load to varibles 
+        game_stats[0]["class"] = game_stats_load[0]["class"]
+        game_stats[0]["difficulty"] = game_stats_load[0]["difficulty"]
+
+        game_stats[1]["room"] = game_stats_load[1]["room"]
+        game_stats[1]["location"] = game_stats_load[1]["location"]
+        location = game_stats_load[1]["location"]
+
+        game_stats[2]["trap_room_puzzle"] = game_stats_load[2]["trap_room_puzzle"]
+        trap_room_puzzle = game_stats_load[2]["trap_room_puzzle"]
+
+        game_stats[2]["water_room_puzzle"] = game_stats_load[2]["water_room_puzzle"]
+        water_room_puzzle = game_stats_load[2]["water_room_puzzle"]
+
+        game_stats[2]["boss_room_key"] = game_stats_load[2]["boss_room_key"]
+        boss_room_key = game_stats_load[2]["boss_room_key"]
+
+        game_stats[2]["trapdoor_quest"] = game_stats_load[2]["trapdoor_quest"]
+        trapdoor_quest = game_stats_load[2]["trapdoor_quest"]
+
+        game_stats[2]["quest_repeat"] = game_stats_load[2]["quest_repeat"]
+        quest_repeat = game_stats_load[2]["quest_repeat"]
+
+        game_stats[3]["trap_room_enemy_death"] = game_stats_load[3]["trap_room_enemy_death"]
+        trap_room_enemy_death = game_stats_load[3]["trap_room_enemy_death"]
+
+        game_stats[3]["trap_room_visible_enemy"] = game_stats_load[3]["trap_room_visible_enemy"]
+        trap_room_visible_enemy = game_stats_load[3]["trap_room_visible_enemy"]
+
+        game_stats[3]["water_room_enemy_death"] = game_stats_load[3]["water_room_enemy_death"]
+        water_room_enemy_death = game_stats_load[3]["water_room_enemy_death"]
+
+        game_stats[3]["water_room_visible_enemy"] = game_stats_load[3]["water_room_visible_enemy"]
+        water_room_visible_enemy = game_stats_load[3]["water_room_visible_enemy"]
+
+        game_stats[4]["player_info"] = game_stats_load[4]["player_info"]
+        player_info = game_stats_load[4]["player_info"]
+
+        game_stats[4]["doubloons"] = game_stats_load[4]["doubloons"]
+        player_inventory[0] = game_stats_load[4]["doubloons"]
+
+        game_stats[4]["potions"] = game_stats_load[4]["potions"]
+        pot_held_list = game_stats_load[4]["potions"]
+
+
+        game_stats[5]["chest_1"] = game_stats_load[5]["chest_1"]
+        chest_1 = game_stats_load[5]["chest_1"]
+
+        game_stats[5]["chest_2"] = game_stats_load[5]["chest_2"]
+        chest_2 = game_stats_load[5]["chest_2"]
+
+        game_stats[5]["chest_3"] = game_stats_load[5]["chest_3"]
+        chest_3 = game_stats_load[5]["chest_3"]
+
+        game_stats[5]["chest_4"] = game_stats_load[5]["chest_4"]
+        chest_4 = game_stats_load[5]["chest_4"]
+
+        print("")
+        print("Welcome To the Fight Against the Deep! \n")
+        print("[1] Play")
+        print("[2] Class Selection")
+        print("[3] Difficulty Selection")
+        print("[4] Sprite Legend")
+        print("[5] A Message From The Developers \n")
+
+        # Anthony
+        # handling exceptions
+        try:
+            choice = int(input("Choice: "))
+            if choice not in [1, 2, 3, 4, 5]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid option!")
+
+        # game start
+        if choice == 1:
+            print("[1] Restart")
+            print("[2] Play")
+
+            try:
+                choice = int(input("Choice: "))
+                if choice not in [1, 2]:
+                    raise ValueError("Invalid Option!")
+            except ValueError:
+                print("Invalid option!")
+                choice = 0
+
+            if choice == 1:
+                reset_stats()
+                print("Welcome to the HMS Uthman! \n")
+
+                # print('"I\'ve been on board for 10 days, disguised as a crewmate."')
+                # time.sleep(3)
+                # print('"I have gained the trust of even the captain."')
+                # time.sleep(3)
+                # print('"No one suspects me of being an imposter among them."')
+                # time.sleep(3)
+                # print('"They said there should be some priceless treasure."')
+                # time.sleep(3)
+                # print('"Well better to go to sleep for tonight."')
+                # input("Enter to go to sleep")
+                # time.sleep(3)
+                # print('You hear screams.')
+                # time.sleep(2)
+                # input("Enter to wake up")
+                # print('"This is the perfect opportunity to find some treasure."')
+                # time.sleep(3)
+                # print('"Wait. How long have I been asleep?"')
+                # time.sleep(1)
+
+
+
+            location_menu = None
+
+        # player classes
+        elif choice == 2:
+            location_menu = "class"
+
+        # player difficulty
+        elif choice == 3:
+            location_menu = "difficulty"
+
+        elif choice == 4:
+            location_menu = "legend"
+
+        elif choice == 5:
+            # michael message
+            print(
+                """
+            This game started development in 2023 and was finished in 2024. 
+            we took a whole YEAR to make it!
+            """
+            )
+            input("ENTER To Return")
+            location_menu = "main"
+
+    # michael
+    # -----difficulty selection-----
+    elif location_menu == "difficulty":
+
+        print()
+        print("Choose Difficulty:")
+        print(f"Current difficulty: {chosen_difficulty.capitalize()} \n")
+        print("[1] Shallows")  # easy
+        print("[2] Open Ocean")  # normal
+        print("[3] Abyss")  # hard
+        print("[4] Hades")  # hell
+        print("[5] Back To Main Menu \n")
+
+        try:
+            difficulty_choice = int(input("Choose a Difficulty: "))
+            if difficulty_choice not in [1, 2, 3, 4, 5]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid Option!")
+
+        if difficulty_choice == 1:
+            print("You have chosen the Shallows.")
+            chosen_difficulty = "shallows"
+            game_stats[0]["difficulty"] = SHALLOWS
+
+        elif difficulty_choice == 2:
+            print("You have chosen the Open Ocean")
+            chosen_difficulty = "open ocean"
+            game_stats[0]["difficulty"] = OPEN_OCEAN
+
+        elif difficulty_choice == 3:
+            print("You have chosen abyss")
+            chosen_difficulty = "abyss"
+            game_stats[0]["difficulty"] = ABYSS
+
+        elif difficulty_choice == 4:
+            print("YOU HAVE CHOSEN HADES")
+            chosen_difficulty = "hades"
+            game_stats[0]["difficulty"] = HADES
+
+        elif difficulty_choice == 5:
+            location_menu = "main"
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+        with open("game.json", "r") as f:
+            game_stats_load = json.load(f)
+
+        base_hp_monsters = game_stats_load[0]["difficulty"][0]
+        base_dmg_monsters = game_stats_load[0]["difficulty"][1]
+
+        skeleton_hp = base_hp_monsters
+        skeleton_dmg = base_dmg_monsters
+
+        barracuda_hp = base_hp_monsters + 60
+        barracuda_dmg = base_dmg_monsters + 5
+
+        zombie_hp = base_hp_monsters + 50
+        zombie_dmg = base_dmg_monsters + 10
+
+        cthulhu_hp = base_hp_monsters + 450
+        cthulhu_dmg = base_dmg_monsters + 50
+
+        skeleton = [skeleton_hp, skeleton_dmg, "skeleton fish"]
+        zombie = [zombie_hp, zombie_dmg, "zombie shark"]
+        barracuda = [barracuda_hp, barracuda_dmg, "barracuda swarm"]
+        cthulhu = [cthulhu_hp, cthulhu_dmg, "cthulhu"]
+
+    # Hayden
+    # -----class selction-----
+    elif location_menu == "class":
+
+        print("Chose Class:")
+        print(f"Current class: {chosen_class.capitalize()} \n")
+        print("[1] Rogue")
+        print("[2] Berserker")
+        print("[3] Knight")
+        print("[4] Back To Menu \n")
+
+        try:
+            class_choice = int(input("Choose a class: "))
+            if class_choice not in [1, 2, 3, 4]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid Option!")
+
+        if class_choice == 1:
+            print("You chose Rogue! \nRogues are quick and cunning.")
+            print()
+            chosen_class = "rogue"
+            game_stats[0]["class"] = ROGUE
+            player_weapon = dagger[0]
+            player_weapon_name = dagger[1]
+
+        elif class_choice == 2:
+            print("You chose Berserker! \nBersekers are strong but slow.")
+            print()
+            chosen_class = "berserker"
+            game_stats[0]["class"] = BERSERKER
+            player_weapon = greatsword[0]
+            player_weapon_name = greatsword[1]
+
+        elif class_choice == 3:
+            print("You chose Knight! \nKnights are all-rounders")
+            print()
+            chosen_class = "knight"
+            game_stats[0]["class"] = KNIGHT
+            player_weapon = sword[0]
+            player_weapon_name = sword[1]
+
+        elif class_choice == 4:
+            location_menu = "main"
+
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+        with open("game.json", "r") as f:
+            game_stats_load = json.load(f)
+
+        player_strength = game_stats_load[0]["class"][0]
+        player_agility = game_stats_load[0]["class"][1]
+
+        player_atk = round((1 + player_strength / 150) * player_weapon)
+        player_info = [player_hp, player_strength, player_agility, player_atk]
+        player_stats(player_info)
+
+        game_stats[4]["player_info"] = player_info
+        with open("game.json", "w") as f:
+            json.dump(game_stats, f, indent=4)
+
+    elif location_menu == "legend":
+
+        print()
+        print("You --> ◊")
+        print("Shop --> π")
+        print(f"Chest --> {chest}")
+        print("Door --> ∩")
+        print("Closed Trapdoor --> 0")
+        print("Opened Trapdoor --> O")
+        print(f"Water --> {water}")
+        print()
+        input("Any Button to Return")
+
+        location_menu = "main"
+
+    # -----start of game-----
+    # Anthony
+    # movement
+    elif game_stats_load[1]["room"] == "spawn":
+
+        print(spawn_drawing_print(location))
+
+        print("")
+        print("[1] Up")
+        print("[2] Down")
+        print("[3] Left")
+        print("[4] Right")
+        print("[5] Interact")
+        print("[6] Pause/Inventory")
+
+        try:
+            choice = int(input("Choice: "))
+            if choice not in [1, 2, 3, 4, 5, 6]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid option!")
+
+        # movment limitations
+        if choice == 1:
+            if location[1] != 1 and location != [4, 0]:
+                location[1] += 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 2:
+            if location[1] != 0:
+                location[1] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 3:
+            if location[0] != 0:
+                location[0] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 4:
+            if location not in [[3, 1], [4, 0]]:
+                location[0] += 1
+            else:
+                print("You hit a wall!")
+
+        # Hayden, Interact
+        elif choice == 5:
+            # chest locations
+            # michael -- basis of chest interaction
+            if location == [0, 0]:
+                if chest_1 is not True:
+                    open_chest()
+
+                    chest_1 = True
+                    game_stats[5]["chest_1"] = True
+                    game_stats[4]["doubloons"] = player_inventory[0]
+
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+                else:
+                    print("You already found this chest")
+
+            # Anthony
+            # Going from spawn to hall
+            if location == [4, 0]:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "hall"
+                location = [0, 1]
+                game_stats[1]["location"] = location
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            # Shop
+            if location == [2, 1]:
+                print()
+                print("You Entered the Shop!")
+                print("[1] Red Potion [50d]")
+                print("[2] Blue Potion [50d] ")
+                print("[3] Green Potion [50d]")
+                print("[4] Dual Blades [200d]")
+                print("[5] Exit")
+
+                try:
+                    choice = int(input("Choice: "))
+                    if choice not in [1, 2, 3, 4, 5]:
+                        raise ValueError("Invalid Option!")
+                except ValueError:
+                    print("Invalid option!")
+
+                if choice == 1:
+                    if player_inventory[0] >= 50:
+                        print("You purchased Red Potion!")
+                        print("-50 doubloons")
+                        player_inventory[0] -= 50
+                        pot_held_list[0] += 1
+                    else:
+                        print("You cannot afford that!")
+
+                elif choice == 2:
+                    if player_inventory[0] >= 50:
+                        print("You purchased Green Potion!")
+                        print("-50 doubloons")
+                        player_inventory[0] -= 50
+                        pot_held_list[1] += 1
+                    else:
+                        print("You cannot afford that!")
+
+                elif choice == 3:
+                    if player_inventory[0] >= 50:
+                        print("You purchased Blue Potion!")
+                        print("-50 doubloons")
+                        player_inventory[0] -= 50
+                        pot_held_list[2] += 1
+                    else:
+                        print("You cannot afford that!")
+
+                elif choice == 4:
+                    if player_inventory[0] >= 200:
+                        print()
+
+                        player_inventory[0] -= 200
+                        player_inventory[1] = dual_blades
+                        player_weapon = dual_blades
+                        player_atk = round((1 + player_strength / 150) * player_weapon)
+
+                        game_stats[4]["player_info"] = player_info
+
+                        with open("game.json", "w") as f:
+                            json.dump(game_stats, f, indent=4)
+
+                        player_info = [
+                            player_hp,
+                            player_strength,
+                            player_agility,
+                            player_atk,
+                        ]
+
+                    else:
+                        print("You dont have enough to buy this!")
+
+                elif choice == 5:
+                    continue
+
+                game_stats[4]["potions"] = pot_held_list
+                game_stats[4]["doubloons"] = player_inventory[0]
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+                print()
+                input("Enter to continue")
+
+        # inventory
+        if choice == 6:
+            inventory()
+
+    # -----hall-----
+    # Anthony
+    # movement
+    elif game_stats_load[1]["room"] == "hall":
+        clear_console()
+        print(hall_drawings_print(location))
+
+        print("")
+        print("[1] Up")
+        print("[2] Down")
+        print("[3] Left")
+        print("[4] Right")
+        print("[5] Interact")
+        print("[6] Pause/Inventory")
+
+        try:
+            choice = int(input("Choice: "))
+            if choice not in [1, 2, 3, 4, 5, 6]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid option!")
+
+        # Anthony
+        # movment limitations
+        if choice == 1:
+            if (location[0] not in [0, 1, 3, 4] and location[1] != 3 
+                and location not in [[5, 1], [2, 2]]):
+                location[1] += 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 2:
+            if (location[0] not in [0, 1, 3, 4] and location[1] != 0 
+                and location not in [[2, 1], [7, 3], [6, 1]]):
+                location[1] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 3:
+            if location[1] != 2 and location not in [[0, 1], [5, 0], [6, 3]]:
+                location[0] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 4:
+            if location[1] != 2 and location not in [[5, 0], [6, 1], [7, 3]]:
+                location[0] += 1
+            else:
+                print("You hit a wall!")
+
+        # Anthony
+        # puzzles and doors
+        elif choice == 5:
+
+            if location == [2, 2] and trap_room_puzzle is True:
+                print()
+                print("The door is locked.")
+                print("A scrambled word appears on the door!")
+                print("It says: 'hoyptn' ")
+                answer = input("Enter the answer: ").lower()
+                print("")
+
+                if answer == "python":
+                    print("You hear some gears move.")
+                    print()
+                    print("You see a note taped to the door")
+                    time.sleep(1)
+                    print()
+
+                    print(drawings.note1)
+                    input("Enter to continue")
+
+                    trap_room_puzzle = False
+                    game_stats[2]["trap_room_puzzle"] = False
+
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+                else:
+                    print("Nothing happens.")
+
+            elif location == [2, 2] and trap_room_puzzle is False:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "trap room"
+                location = [5, 0]
+                game_stats[1]["location"] = location
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            elif location == [0, 1]:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "spawn"
+                location = [4, 0]
+                game_stats_load[1]["location"] = location
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            elif location == [5, 0] and water_room_puzzle is True:
+                print("The door is locked.")
+                print("A message appears on the door. It says:")
+                print('''
+                It has been 6 hours since the ship crashed. 
+                Only 2 of us remain alive. We tried to find some food, 
+                but there is only enough for maybe 1 day. 
+                Rescue told us they would arrive 9 hours ago...''')
+                print()
+                print("A number pad is on the bottom.")
+                print("")
+                answer = input("Enter the answer: ")
+
+                if answer == "6219":
+                    print("You hear some gears move.")
+
+                    water_room_puzzle = False
+                    game_stats[2]["water_room_puzzle"] = False
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+                else:
+                    print("Nothing happens.")
+
+            elif location == [5, 0] and water_room_puzzle is False:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "water room"
+                location = [5, 4]
+                game_stats[1]["location"] = location
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            elif location == [7, 3]:
+                if boss_room_key is False:
+                    print()
+                    print("The door is locked.")
+                    print("Looks like it needs a key.")
+
+                elif boss_room_key is True:
+                    print()
+                    print("You Opened the Door!")
+                    input("Any Button to Continue")
+
+                    game_stats[1]["room"] = "boss room"
+                    location = [0, 1]
+                    game_stats[1]["location"] = location
+
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+
+                    print()
+                    print("The doors locks behind you.")
+
+        if choice == 6:
+            inventory()
+
+    # -----trap room-----
+    elif game_stats_load[1]["room"] == "trap room":
+        clear_console()
+        print(traproom_drawings_print(location))
+
+        # traps
+        if location in [[2, 2], [3, 2]]:
+            print()
+            print("You stepped on a trap!")
+
+            damage_delt = trap_damage(player_info[0])
+            player_info[0] -= damage_delt
+
+            print(f"You Took {damage_delt} damage!")
+
+            check_health_death(player_info)
+
+            game_stats[4]["player_info"] = player_info
+            with open("game.json", "w") as f:
+                json.dump(game_stats, f, indent=4)
+
+            death_screen()
+
+            print(f"You now have {player_info[0]} health!")
+            print()
+            input("Enter to continue")
+            print()
+
+        # Anthony
+        # movement        print("")
+        print("[1] Up")
+        print("[2] Down")
+        print("[3] Left")
+        print("[4] Right")
+        print("[5] Interact")
+        print("[6] Pause/Inventory")
+
+        try:
+            choice = int(input("Choice: "))
+            if choice not in [1, 2, 3, 4, 5, 6]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid option!")
+
+
+        # movment limitations
+        if choice == 1:
+            if location[1] != 3 and location[0] != 4 and location != [5, 1]:
+                location[1] += 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 2:
+            if location[1] != 4 and location not in [[5, 0], [4, 1], [3, 1], 
+                                                     [2, 1], [1, 1], [0, 1]]:
+                location[1] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 3:
+            if location[0] != 0 and location != [5, 0]:
+                location[0] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 4:
+            if location[0] != 5 and location not in [[3, 2], [3, 3]]:
+                location[0] += 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 5:
+            # Anthony
+            # leaving room
+            if location == [5, 0]:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "hall"
+                location = [2, 2]
+                game_stats[1]["location"] = location
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            # chest
+            elif location == [3, 3]:
+                if chest_2 is not True:
+                    open_chest()
+
+                    print("You see another note inside the chest")
+
+                    time.sleep(1)
+
+                    print()
+                    print(drawings.note2)
+                    print()
+                    input("Enter to continue")
+
+                    chest_2 = True
+                    game_stats[5]["chest_2"] = True
+                    game_stats[4]["doubloons"] = player_inventory[0]
+
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+                else:
+                    print("You already found this chest")
+
+            # quest
+            elif location == [1, 2]:
+                if trapdoor_quest is False or trapdoor_quest is None:
+                    print("")
+                    print("You see a trapdoor on the floor.")
+                    print("It is locked.")
+                    input("Any Button to Continue")
+
+                elif trapdoor_quest is True:
+                    print("")
+                    print("The trapdoor is open.")
+                    print("You see something jump out!")
+                    print()
+
+                    # MOB encounter -- Michael
+                    if trap_quest_enemy_death is False:
+                        enemy_info = enemy_determine()
+                        combat()
+                        trap_quest_enemy_death = True
+
+                    hat = True
+                    trapdoor_quest = None
+
+                    game_stats[2]["trapdoor_quest"] = None
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+
+                    print()
+                    print("You collect the hat!")
+                    print()
+                    print("A not falls from the hat")
+                    time.sleep(1)
+                    print("The words look like they were writen in a rush")
+                    print()
+                    print(drawings.note3)
+                    print()
+                    input("Enter to continue")
+
+        if choice == 6:
+            inventory()
+
+        # Michael
+        # combat node
+        if location == [4, 1] and trap_room_enemy_death is False:
+            enemy_info = enemy_determine()
+            combat()
+
+            # Anthony
+            # replacing map variables for enemy death
+            trap_room_visible_enemy = False
+            trap_room_enemy_death = True
+
+            game_stats[3]["trap_room_visible_enemy"] = False
+            game_stats[3]["trap_room_enemy_death"] = True
+            game_stats[4]["player_info"] = player_info
+
+            with open("game.json", "w") as f:
+                json.dump(game_stats, f, indent=4)
+
+    # -----Water room-----
+    # Movment made by Anthony
+    elif game_stats_load[1]["room"] == "water room":
+        clear_console()
+        print(waterroom_drawings_print(location))
+
+        # Anthony
+        # traps and fish attack
+        if location in [[1, 2], [3, 2]]:
+            print()
+            print("You stepped on a trap!")
+
+            damage_delt = trap_damage(player_info[0])
+            print(f"You Took {damage_delt} damage!")
+            player_info[0] -= damage_delt
+            check_health_death(player_info)
+
+            game_stats[4]["player_info"] = player_info
+
+            with open("game.json", "w") as f:
+                json.dump(game_stats, f, indent=4)
+
+            death_screen()
+            print(f"You now have {player_info[0]} health!")
+            print()
+            input("Enter to continue")
+            print()
+
+        if location[1] in [0, 1]:
+            fish_attack_chance = random.randrange(5)
+            if fish_attack_chance == 0:
+                print()
+
+                damage_delt = fish_attack(player_info[0])
+                print(f"You Took {damage_delt} damage!")
+                player_info[0] -= damage_delt
+
+                game_stats[4]["player_info"] = player_info
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+                check_health_death(player_info)
+                death_screen()
+
+                print(f"You now have {player_info[0]} health!")
+                input("Enter to continue")
+                print()
+
+        # Anthony
+        # movement
+        print("")
+        print("[1] Up")
+        print("[2] Down")
+        print("[3] Left")
+        print("[4] Right")
+        print("[5] Interact")
+        print("[6] Pause/Inventory")
+
+        try:
+            choice = int(input("Choice: "))
+            if choice not in [1, 2, 3, 4, 5, 6]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid option!")
+
+        # movment limitations
+        if choice == 1:
+            if location not in [[5, 4], [4, 2], [3, 2], [2, 2], 
+                                [1, 2], [0, 2], [6, 1]]:
+                location[1] += 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 2:
+            if location[1] != 0 and location != [6, 1]:
+                location[1] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 3:
+            if location[0] != 0 and location not in [[5, 3], [5, 4]]:
+                location[0] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 4:
+            if location not in [[6, 1], [5, 0], [5, 2], [5, 3], [5, 4]]:
+                location[0] += 1
+            else:
+                print("You hit a wall!")
+
+        # leaving room
+        elif choice == 5:
+            if location == [5, 4]:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "hall"
+                location = [5, 0]
+                game_stats[1]["location"] = location
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            # Hayden
+            # chests
+            elif location == [1, 0]:
+                if chest_3 is not True:
+                    open_chest()
+                    chest_3 = True
+                    game_stats[5]["chest_3"] = True
+                    game_stats[4]["doubloons"] = player_inventory[0]
+
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+                else:
+                    print("You already found this chest")
+
+            elif location == [4, 0]:
+                if chest_4 is not True:
+                    open_chest()
+                    chest_4 = True
+                    game_stats[5]["chest_4"] = True
+                    game_stats[4]["doubloons"] = player_inventory[0]
+
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+                else:
+                    print("You already found this chest")
+
+            # Anthony
+            # leaving room
+            elif location == [6, 1]:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "npc room"
+                location = [0, 1]
+                game_stats[1]["location"] = location
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            elif location == [5, 3]:
+                if enemy_death is False:
+                    enemy_info = enemy_determine()
+                    combat()
+                    water_room_enemy_death = True
+                    enemy_death = True
+
+        elif choice == 6:
+            inventory()
+
+        if location == [5, 3] and water_room_enemy_death is False:
+            enemy_info = enemy_determine()
+            combat()
+            # Anthony
+            # replacing map variables
+            water_room_visible_enemy = False
+            water_room_enemy_death = True
+
+            game_stats[3]["water_room_visible_enemy"] = False
+            game_stats[3]["water_room_enemy_death"] = True
+            game_stats[4]["player_info"] = player_info
+
+            with open("game.json", "w") as f:
+                json.dump(game_stats, f, indent=4)
+
+    # -----npc room-----
+    elif game_stats_load[1]["room"] == "npc room":
+        clear_console()
+        print(npcroom_drawings_print(location))
+
+        # Anthony
+        # quest assigment and completion
+        if location == [1, 1]:
+            if trapdoor_quest is False:
+                print('You see someone and say "Hello". ')
+                time.sleep(2)
+                print("They slowly approach from the shadows.")
+                time.sleep(1)
+                print('"You want to get out right?"')
+                time.sleep(1)
+                print('"Go find the trapdoor and get my hat back!"')
+                time.sleep(1)
+                print('"I will give you a key in return"')
+
+                trapdoor_quest = True
+                game_stats[2]["trapdoor_quest"] = True
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+            elif trapdoor_quest is True:
+                print('"Get me my hat!"')
+
+            elif easter_egg is True:
+                print("HEY!")
+                time.sleep(1)
+                print("YOU'RE WEARING MY HAT")
+                print("I have to admit that i does look a lot better on you")
+                print("The had does look a bit stained though ... hum ... I'll let you keep ")
+                boss_room_key = True
+                game_stats[2]["boss_room_key"] = True
+                quest_repeat = True
+                game_stats[2]["quest_repeat"] = True
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+
+            elif trapdoor_quest is None:
+                if quest_repeat is False:
+                    print('"Thank you! I have been looking for that hat!"')
+                    time.sleep(1)
+                    print("Here is that key I promised.")
+
+                    boss_room_key = True
+                    game_stats[2]["boss_room_key"] = True
+                    quest_repeat = True
+                    game_stats[2]["quest_repeat"] = True
+
+                    with open("game.json", "w") as f:
+                        json.dump(game_stats, f, indent=4)
+
+                elif quest_repeat is True:
+                    print("Good luck on your journey!")
+
+        # Anthony
+        # movment
+        print("")
+        print("[1] Up")
+        print("[2] Down")
+        print("[3] Left")
+        print("[4] Right")
+        print("[5] Interact")
+        print("[6] Pause/Inventory")
+
+        try:
+            choice = int(input("Choice: "))
+            if choice not in [1, 2, 3, 4, 5, 6]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid option!")
+
+        # movment limitations
+        if choice in [1, 2]:
+            print("You hit a wall!")
+
+        elif choice == 3:
+            if location != [0, 1]:
+                location[0] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 4:
+            if location != [1, 1]:
+                location[0] += 1
+            else:
+                print("You hit a wall!")
+
+        # leaving room
+        elif choice == 5:
+            if location == [0, 1]:
+                print()
+                print("You Opened the Door!")
+                input("Any Button to Continue")
+
+                game_stats[1]["room"] = "water room"
+                location = [6, 1]
+                game_stats[1]["location"] = location
+
+                with open("game.json", "w") as f:
+                    json.dump(game_stats, f, indent=4)
+
+        if choice == 6:
+            inventory()
+
+    # ----- Boss Room-----
+    elif game_stats_load[1]["room"] == "boss room":
+
+        # Anthony
+        # teleport trap
+        if location in [[4, 2], [5, 2], [6, 2], [7, 0], [8, 0], [9, 0]]:
+            print()
+            print("Something feels off.")
+            input("Enter to continue")
+            print()
+            print("You teleport back to the door!")
+            location = [0, 1]
+
+        print(bossroom_drawings_print(location))
+
+        # trap
+        if location in [[1, 0], [6, 0], [4, 1], [2, 2], [7, 2]]:
+            print()
+            print("You stepped on a trap!")
+
+            damage_delt = trap_damage(player_info[0])
+            print(f"You Took {damage_delt} damage!")
+            player_info[0] -= damage_delt
+
+            game_stats[4]["player_info"] = player_info
+            with open("game.json", "w") as f:
+                json.dump(game_stats, f, indent=4)
+
+            print(f"You now have {player_info[0]} health!")
+            print()
+            input("Enter to continue")
+            print()
+            check_health_death(player_info)
+            death_screen()
+
+        # final boss
+        if location[0] == 8:
+            print()
+            cthulhu_fight()
+            print("You see a map on the floor and pick it up.")
+            time.sleep(2)
+            print(drawings.full_map)
+
+        # Anthony
+        # movement
+        print("")
+        print("[1] Up")
+        print("[2] Down")
+        print("[3] Left")
+        print("[4] Right")
+        print("[5] Interact")
+        print("[6] Pause/Inventory")
+
+        try:
+            choice = int(input("Choice: "))
+            if choice not in [1, 2, 3, 4, 5, 6]:
+                raise ValueError("Invalid Option!")
+        except ValueError:
+            print("Invalid option!")
+
+        # movment limitations
+        if choice == 1:
+            if location[1] != 2 and location not in [[0, 1], [10, 1]]:
+                location[1] += 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 2:
+            if location[1] != 0 and location not in [[0, 1], [10, 1]]:
+                location[1] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 3:
+            if location not in [[1, 0], [0, 1], [1, 2]]:
+                location[0] -= 1
+            else:
+                print("You hit a wall!")
+
+        elif choice == 4:
+            if location not in [[10, 1], [9, 0], [9, 2]]:
+                location[0] += 1
+            else:
+                print("You hit a wall!")
+
+        # Anthony
+        # end of game
+        elif choice == 5:
+            if location == [10, 1]:
+                print("")
+                print("You Opened the Door!")
+                time.sleep(2)
+                print("You see the bright sun shining in your eyes.")
+                time.sleep(2)
+                print("You step out and see the vast ocean.")
+                time.sleep(2)
+                input("Any Button to Continue")
+                print("")
+
+                end_of_game_story()
+
+                print("     -----\033[1mTHE END\033[1m-----")
+                print(drawings.endscene)
+
+                print("Thank you for playing.")
+                print("2023 - 2024")
+                print("The Fight Against the Deep")
+                print("Made by Michael, Hayden, Anthony, and Uthman")
+
+                print("[1] Back to main menu")
+                print("[2] Quit game")
+
+                try:
+                    choice = int(input(""))
+                    if choice not in [1, 2]:
+                        raise ValueError("Invalid Option!")
+                except ValueError:
+                    print("Invalid Option!")
+
+                if choice == 1:
+                    location_menu = "main"
+                    reset_stats()
+                else:
+                    print("Thank you for playing.")
+                    reset_stats()
+                    break
+
+                game_stats[1]["room"] = None
+                location = None
+
+            elif location == [0, 1]:
+                print("The door is locked")
+
+        if choice == 6:
+            inventory()
+
+
+
+
+# Map in drawings.py file:
+
+from colorama import Fore, Back, Style
+
+water = (f"{Fore.BLUE}≈{Fore.WHITE}")
+chest = (f"{Fore.YELLOW}▣{Fore.WHITE}")
+
+
+# -----spawn map-----
+spawn00 = f"""
+██████
+█░░π░█
+█◊░░░║
+██████"""
+spawn10 = f"""
+██████
+█░░π░█
+█{chest}◊░░║
+██████"""
+spawn20 = f"""
+██████
+█░░π░█
+█{chest}░◊░║
+██████"""
+spawn30 = f"""
+██████
+█░░π░█
+█{chest}░░◊║
+██████"""
+spawn40 = f"""
+██████
+█░░π░█
+█{chest}░░░◊
+██████"""
+spawn01 = f"""
+██████
+█◊░π░█
+█{chest}░░░║
+██████"""
+spawn11 = f"""
+██████
+█░◊π░█
+█{chest}░░░║
+██████"""
+spawn21 = f"""
+██████
+█░░◊░█
+█{chest}░░░║
+██████"""
+spawn31 = f"""
+██████
+█░░π◊█
+█{chest}░░░║
+██████"""
+# -----hall-----
+hall50 = f"""
+     ███
+     █░║
+██∩███░█
+║░░░░░░█
+█████◊██"""
+hall01 = f"""
+     ███
+     █░║
+██∩███░█
+◊░░░░░░█
+█████∩██"""
+hall11 = f"""
+     ███
+     █░║
+██∩███░█
+║◊░░░░░█
+█████∩██"""
+hall21 = f"""
+     ███
+     █░║
+██∩███░█
+║░◊░░░░█
+█████∩██"""
+hall31 = f"""
+     ███
+     █░║
+██∩███░█
+║░░◊░░░█
+█████∩██"""
+hall41 = f"""
+     ███
+     █░║
+██∩███░█
+║░░░◊░░█
+█████∩██"""
+hall51 = f"""
+     ███
+     █░║
+██∩███░█
+║░░░░◊░█
+█████∩██"""
+hall61 = f"""
+     ███
+     █░║
+██∩███░█
+║░░░░░◊█
+█████∩██"""
+hall22 = f"""
+     ███
+     █░║
+██◊███░█
+║░░░░░░█
+█████∩██"""
+hall62 = f"""
+     ███
+     █░║
+██∩███◊█
+║░░░░░░█
+█████∩██"""
+hall63 = f"""
+     ███
+     █◊║
+██∩███░█
+║░░░░░░█
+█████∩██"""
+hall73 = f"""
+     ███
+     █░◊
+██∩███░█
+║░░░░░░█
+█████∩██"""
+# -----trap room-----
+traproom50 = f"""
+██████
+█░░░{chest}█
+█░0▒▒███
+█░░░░¿░█
+██████◊█ """
+traproom51 = f"""
+██████
+█░░░{chest}█
+█░0▒▒███
+█░░░░¿◊█
+██████∩█ """
+traproom41 = f"""
+██████
+█░░░{chest}█
+█░0▒▒███
+█░░░░◊░█
+██████∩█ """
+traproom31 = f"""
+██████
+█░░░{chest}█
+█░0▒▒███
+█░░░◊░░█
+██████∩█ """
+traproom21 = f"""
+██████
+█░░░{chest}█
+█░0▒▒███
+█░░◊░░░█
+██████∩█ """
+traproom11 = f"""
+██████
+█░░░{chest}█
+█░0▒▒███
+█░◊░░░░█
+██████∩█ """
+traproom01 = f"""
+██████
+█░░░{chest}█
+█░0▒▒███
+█◊░░░░░█
+██████∩█ """
+traproom02 = f"""
+██████
+█░░░{chest}█
+█◊0▒▒███
+█░░░░░░█
+██████∩█ """
+traproom12 = f"""
+██████
+█░░░{chest}█
+█░◊▒▒███
+█░░░░░░█
+██████∩█ """
+traproom22 = f"""
+██████
+█░░░{chest}█
+█░0◊▒███
+█░░░░░░█
+██████∩█ """
+traproom32 = f"""
+██████
+█░░░{chest}█
+█░0▒◊███
+█░░░░░░█
+██████∩█ """
+traproom03 = f"""
+██████
+█◊░░{chest}█
+█░0▒▒███
+█░░░░░░█
+██████∩█ """
+traproom13 = f"""
+██████
+█░◊░{chest}█
+█░0▒▒███
+█░░░░░░█
+██████∩█ """
+traproom23 = f"""
+██████
+█░░◊{chest}█
+█░0▒▒███
+█░░░░░░█
+██████∩█ """
+traproom33 = f"""
+██████
+█░░░◊█
+█░0▒▒███
+█░░░░░░█
+██████∩█ """
+# -----waterroom-----
+
+waterroom00 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█◊{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom10 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}◊{water}{water}{chest}{water}█
+████████"""
+waterroom20 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}◊{water}{chest}{water}█
+████████"""
+waterroom30 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}◊{chest}{water}█
+████████"""
+waterroom40 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}◊{water}█
+████████"""
+waterroom50 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}◊█
+████████"""
+waterroom01 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█◊{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom11 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}◊{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom21 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}◊{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom31 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}◊{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom41 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}◊{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom51 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}◊║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom61 = f"""
+     █∩█
+██████░█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}◊
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom02 = f"""
+     █∩█
+██████░█
+█◊▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom12 = f"""
+     █∩█
+██████░█
+█░◊░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom22 = f"""
+     █∩█
+██████░█
+█░▒◊▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom32 = f"""
+     █∩█
+██████░█
+█░▒░◊░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom42 = f"""
+     █∩█
+██████░█
+█░▒░▒◊░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom52 = f"""
+     █∩█
+██████░█
+█░▒░▒░◊█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom53 = f"""
+     █∩█
+██████◊█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+waterroom54 = f"""
+     █◊█
+██████¿█
+█░▒░▒░░█
+█{water}{water}{water}{water}{water}{water}║
+█{water}{chest}{water}{water}{chest}{water}█
+████████"""
+# -----npcroom-----
+npcroom01 = f"""
+███
+◊░█
+█ඞ█
+███"""
+npcroom11 = f"""
+███
+║◊█
+█ඞ█
+███"""
+# -----bossroom---
+bossroom10 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█◊░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom20 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒◊░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom30 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░◊░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom40 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░◊░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom50 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░◊▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom60 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░◊░░░█
+███╔═══╗███
+  ███████"""
+bossroom70 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒◊░░█
+███╔═══╗███
+  ███████"""
+bossroom80 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░◊░█
+███╔═══╗███
+  ███████"""
+bossroom90 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░◊█
+███╔═══╗███
+  ███████"""
+bossroom01 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+◊░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom11 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║◊░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom21 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░◊░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom31 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░◊▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom41 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░◊░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom51 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒◊░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom61 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░◊░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom71 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░◊░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom81 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░◊Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom91 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░◊║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom101 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░░█
+║░░░▒░░░░Ω◊
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom12 = f"""
+  ███████
+███╚═══╝███
+█◊▒░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom22 = f"""
+  ███████
+███╚═══╝███
+█░◊░░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom32 = f"""
+  ███████
+███╚═══╝███
+█░▒◊░░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom42 = f"""
+  ███████
+███╚═══╝███
+█░▒░◊░░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom52 = f"""
+  ███████
+███╚═══╝███
+█░▒░░◊░▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom62 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░◊▒░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom72 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░◊░░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom82 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒◊░█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+bossroom92 = f"""
+  ███████
+███╚═══╝███
+█░▒░░░░▒░◊█
+║░░░▒░░░░Ω║
+█▒░░░░▒░░░█
+███╔═══╗███
+  ███████"""
+
+
+full_map = f"""
+
+
+ ██████
+ █░░░{chest}█       ███████
+ █░0▒▒███   ███╚═══╝███
+ █░░░░░░█ ███░▒░░░░▒░░█
+███████∩█ █░║░░░▒░░░░░║
+█░░π░██∩███░█▒░░░░▒░░░█
+█{chest}░░░║░░░░░░███╔═══╗███
+███████████∩█ ███████
+     ██████░█
+     █░▒░▒░░███
+     █{water}{water}{water}{water}{water}{water}║░█
+     █{water}{chest}{water}{water}{chest}{water}█░█
+     ██████████
+
+
+
+"""
+
+# original_full_map = f"""
+
+
+#  ██████
+#  █░░░▣█       ███████
+#  █░0▒▒███   ███╚═══╝███
+#  █░░░░░░█ ███░▒░░░░▒░░█
+# ███████∩█ █░║░░░▒░░░░░║
+# █░░π░██∩███░█▒░░░░▒░░░█
+# █▣░░░║░░░░░░███╔═══╗███
+# ███████████∩█ ███████
+#      ██████░█
+#      █░▒░▒░░███
+#      █≈≈≈≈≈≈║░█
+#      █≈▣≈≈▣≈█░█
+#      ██████████
+
+
+
+# """
+
+
+endscene = f"""
+  ░░░   ■    ░░░
+ ░░░        ░░░░░░
+  ░     ║▌  ░
+        ║▌▌
+        ║▌▌▌
+        ║      ■▌  ◊
+    █████████████████
+  ≈≈≈≈█████████████≈≈≈≈≈≈≈≈≈
+    ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈"""
+
+
+
+
+
+# -----notes----- Michael and Anthony
+note1 = """
+╔═════════════════╕
+║March 8, 1997    │
+║Capt. Parta      │
+║sounds like a    │
+║madman, keeps    │
+║rambling 'bout   │
+║ some dude named │
+║c̸̛̛̺̽͌̎͋̅̈́͆̓̔͝͠t̵͚̟̃̓͌̂̾͗̊͋̈́͗̚͘̚͝h̴̨̝͉̩̫̲̝̜͑̾̔̒̋̄̉͛͜u̴̢̢̨̫̭̠̩̤̦̎͒̄̓̾̕͜͜l̴̢̛͓̬͖̮̲̩̈́́͂͐̿̈̆͜͝͠͠u̶̡̮͖̮̺͙̟͔̻̜̝͛̒̈́. I think  |
+║he's goin'       │
+║crazy. Gotta     |
+║go, ocean calls  |
+║me.              |
+╙─────────────────┘
+"""
+note2 = """
+╔═════════════════════════╕
+║March 9, 1997            │
+║Something's outside the  |
+║ship, it's trying to     |
+║break in. Capt. Parta is |
+║trying to sink the ship, |
+║we trapped him in the    |
+║boiler room. Who knows   |
+║what is outside.         |
+╙─────────────────────────┘
+"""
+note3 = """
+╔═════════════════════════╕
+║March 10, 1997           │
+║No one knows what's going│
+║on. The boiler room door │
+║is broken and the lights │
+║won't work. There is a   │
+║feeling something is     │
+║watching. We take turns  │
+║keeping watch, but our   │
+║last crewmate never      │
+║returned. Well it's my   │
+║turn next night so       │
+║lets hope I walk out.    │ 
+║Alive.                   │
+╙─────────────────────────┘
+"""
+
+# # # Maps made by Anthony
+# # # -----spawn map-----
+# spawn00 = """
+# ██████
+# █░░π░█
+# █◊░░░║
+# ██████"""
+# spawn10 = """
+# ██████
+# █░░π░█
+# █▣◊░░║
+# ██████"""
+# spawn20 = """
+# ██████
+# █░░π░█
+# █▣░◊░║
+# ██████"""
+# spawn30 = """
+# ██████
+# █░░π░█
+# █▣░░◊║
+# ██████"""
+# spawn40 = """
+# ██████
+# █░░π░█
+# █▣░░░◊
+# ██████"""
+# spawn01 = """
+# ██████
+# █◊░π░█
+# █▣░░░║
+# ██████"""
+# spawn11 = """
+# ██████
+# █░◊π░█
+# █▣░░░║
+# ██████"""
+# spawn21 = """
+# ██████
+# █░░◊░█
+# █▣░░░║
+# ██████"""
+# spawn31 = """
+# ██████
+# █░░π◊█
+# █▣░░░║
+# ██████"""
+# # -----hall-----
+# hall50 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ║░░░░░░█
+# █████◊██"""
+# hall01 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ◊░░░░░░█
+# █████∩██"""
+# hall11 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ║◊░░░░░█
+# █████∩██"""
+# hall21 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ║░◊░░░░█
+# █████∩██"""
+# hall31 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ║░░◊░░░█
+# █████∩██"""
+# hall41 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ║░░░◊░░█
+# █████∩██"""
+# hall51 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ║░░░░◊░█
+# █████∩██"""
+# hall61 = """
+#      ███
+#      █░║
+# ██∩███░█
+# ║░░░░░◊█
+# █████∩██"""
+# hall22 = """
+#      ███
+#      █░║
+# ██◊███░█
+# ║░░░░░░█
+# █████∩██"""
+# hall62 = """
+#      ███
+#      █░║
+# ██∩███◊█
+# ║░░░░░░█
+# █████∩██"""
+# hall63 = """
+#      ███
+#      █◊║
+# ██∩███░█
+# ║░░░░░░█
+# █████∩██"""
+# hall73 = """
+#      ███
+#      █░◊
+# ██∩███░█
+# ║░░░░░░█
+# █████∩██"""
+# # -----trap room-----
+# traproom50 = """
+# ██████
+# █░░░▣█
+# █░0▒▒███
+# █░░░░¿░█
+# ██████◊█ """
+# traproom51 = """
+# ██████
+# █░░░▣█
+# █░0▒▒███
+# █░░░░¿◊█
+# ██████∩█ """
+# traproom41 = """
+# ██████
+# █░░░▣█
+# █░0▒▒███
+# █░░░░◊░█
+# ██████∩█ """
+# traproom31 = """
+# ██████
+# █░░░▣█
+# █░0▒▒███
+# █░░░◊░░█
+# ██████∩█ """
+# traproom21 = """
+# ██████
+# █░░░▣█
+# █░0▒▒███
+# █░░◊░░░█
+# ██████∩█ """
+# traproom11 = """
+# ██████
+# █░░░▣█
+# █░0▒▒███
+# █░◊░░░░█
+# ██████∩█ """
+# traproom01 = """
+# ██████
+# █░░░▣█
+# █░0▒▒███
+# █◊░░░░░█
+# ██████∩█ """
+# traproom02 = """
+# ██████
+# █░░░▣█
+# █◊0▒▒███
+# █░░░░░░█
+# ██████∩█ """
+# traproom12 = """
+# ██████
+# █░░░▣█
+# █░◊▒▒███
+# █░░░░░░█
+# ██████∩█ """
+# traproom22 = """
+# ██████
+# █░░░▣█
+# █░0◊▒███
+# █░░░░░░█
+# ██████∩█ """
+# traproom32 = """
+# ██████
+# █░░░▣█
+# █░0▒◊███
+# █░░░░░░█
+# ██████∩█ """
+# traproom03 = """
+# ██████
+# █◊░░▣█
+# █░0▒▒███
+# █░░░░░░█
+# ██████∩█ """
+# traproom13 = """
+# ██████
+# █░◊░▣█
+# █░0▒▒███
+# █░░░░░░█
+# ██████∩█ """
+# traproom23 = """
+# ██████
+# █░░◊▣█
+# █░0▒▒███
+# █░░░░░░█
+# ██████∩█ """
+# traproom33 = """
+# ██████
+# █░░░◊█
+# █░0▒▒███
+# █░░░░░░█
+# ██████∩█ """
+# # -----waterroom-----
+# waterroom00 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █◊▣≈≈▣≈█
+# ████████"""
+# waterroom10 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈◊≈≈▣≈█
+# ████████"""
+# waterroom20 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣◊≈▣≈█
+# ████████"""
+# waterroom30 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈◊▣≈█
+# ████████"""
+# waterroom40 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈◊≈█
+# ████████"""
+# waterroom50 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣◊█
+# ████████"""
+# waterroom01 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █◊≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom11 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈◊≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom21 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈◊≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom31 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈◊≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom41 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈◊≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom51 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈◊║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom61 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈◊
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom02 = """
+#      █∩█
+# ██████░█
+# █◊▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom12 = """
+#      █∩█
+# ██████░█
+# █░◊░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom22 = """
+#      █∩█
+# ██████░█
+# █░▒◊▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom32 = """
+#      █∩█
+# ██████░█
+# █░▒░◊░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom42 = """
+#      █∩█
+# ██████░█
+# █░▒░▒◊░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom52 = """
+#      █∩█
+# ██████░█
+# █░▒░▒░◊█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom53 = """
+#      █∩█
+# ██████◊█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# waterroom54 = """
+#      █◊█
+# ██████¿█
+# █░▒░▒░░█
+# █≈≈≈≈≈≈║
+# █≈▣≈≈▣≈█
+# ████████"""
+# # -----npcroom-----
+# npcroom01 = """
+# ███
+# ◊░█
+# █ඞ█
+# ███"""
+# npcroom11 = """
+# ███
+# ║◊█
+# █ඞ█
+# ███"""
+# # -----bossroom---
+# bossroom10 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █◊░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom20 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒◊░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom30 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░◊░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom40 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░◊░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom50 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░◊▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom60 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░◊░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom70 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒◊░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom80 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░◊░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom90 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░◊█
+# ███╔═══╗███
+#   ███████"""
+# bossroom01 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ◊░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom11 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║◊░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom21 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░◊░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom31 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░◊▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom41 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░◊░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom51 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒◊░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom61 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░◊░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom71 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░◊░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom81 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░◊Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom91 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░◊║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom101 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░░█
+# ║░░░▒░░░░Ω◊
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom12 = """
+#   ███████
+# ███╚═══╝███
+# █◊▒░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom22 = """
+#   ███████
+# ███╚═══╝███
+# █░◊░░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom32 = """
+#   ███████
+# ███╚═══╝███
+# █░▒◊░░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom42 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░◊░░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom52 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░◊░▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom62 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░◊▒░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom72 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░◊░░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom82 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒◊░█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+# bossroom92 = """
+#   ███████
+# ███╚═══╝███
+# █░▒░░░░▒░◊█
+# ║░░░▒░░░░Ω║
+# █▒░░░░▒░░░█
+# ███╔═══╗███
+#   ███████"""
+
+
+
+# JSON info in game.json file
+
+
+[
+    {
+        "class": [
+            75,
+            45
+        ],
+        "difficulty": [
+            200,
+            10
+        ]
+    },
+    {
+        "room": "spawn",
+        "location": [
+            1,
+            0
+        ]
+    },
+    {
+        "trap_room_puzzle": true,
+        "water_room_puzzle": true,
+        "boss_room_key": false,
+        "trapdoor_quest": false,
+        "quest_repeat": false
+    },
+    {
+        "trap_room_enemy_death": false,
+        "trap_room_visible_enemy": true,
+        "water_room_enemy_death": false,
+        "water_room_visible_enemy": true
+    },
+    {
+        "player_info": [
+            100,
+            40,
+            20,
+            63
+        ],
+        "doubloons": 0,
+        "potions": [
+            0,
+            0,
+            0
+        ]
+    },
+    {
+        "chest_1": false,
+        "chest_2": false,
+        "chest_3": false,
+        "chest_4": false
+    }
+]
