@@ -1,0 +1,75 @@
+# My first adventure game
+morality = 0
+strength = 50
+print("You wake up in the middle of the road.")
+print("You look around and there is a sign thatt says "
+      "'You are in Chicago'")
+print("")
+print("A magic wizzard approchaes you and offers "
+      "you a potion")
+print("")
+print("[1] get off of the road and ignore him.")
+print("[2] spit in his face.")
+print("[3] Drink the potion.")
+
+choice = int(input(">"))
+
+if choice == 1:
+    print("That was probably the best move."
+          "You get +10 morallity points")
+    morality += 10
+elif choice == 2:
+    print("You spit in his face and he curses you"
+          "In retribution. You grow weaker."
+          "You make your way off the road.")
+    morality -= 10
+    strength /= 2
+elif choice == 3:
+    print("The wizzard tells you are going to need this"
+          "Your unwise dessison choice end up buffing"
+          "Your stregth but you feel a little guilty"
+          "You get off the road")
+    strength += 50
+    morality -= 20
+print(f"Your morality is {morality}")
+print(f"Your strength is {strength}")
+# Second choice
+print("")
+print("You find a loaded gun on the floor ")
+print("[1] Pick up the gun")
+print("[2] Leave it alone")
+
+gun = int(input(">"))
+
+if gun == 1:
+    print("Nice you have have a illegai gun "
+          "Your stregth increses significatly "
+          "Your morality decreases significantly")
+    strength += 50
+    morality -= 50
+elif gun == 2:
+    print("Good idea leave it for someone else to get "
+          "Your strengh decreses significalty "
+          "Your morality increses significalty")
+    strength -= 50
+    morality += 50
+print(f"Your strength is {strength}")
+print(f"Your morality is {morality}")
+# Third choice (Boss)
+print("Oh no suddenly someone pulles out a knife and mugges you")
+print("[1] Fight them")
+print("[2] Convince them to not stab you")
+print("")
+
+boss = int(input(">"))
+
+if boss == 1 and strength > 50:
+    print("You shoot them and win! No muggging today!")
+elif boss == 1 and strength <= 50:
+    print("You did not have the gun and you get stabbed :(")
+elif boss == 2 and morality < 0:
+    print("You convice them to join you criminal empire and sell drugs")
+elif boss == 2 and morality >= 0:
+    print(
+        "You convince them not to stab you but to mug the old lady down the street"
+    )
