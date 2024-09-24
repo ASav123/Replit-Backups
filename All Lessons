@@ -265,6 +265,7 @@ else:
 age = 100
 fav_num = 20
 name = "Dave"
+
 friend = True
 if friend is True:
     if name.lower() == "dave" and fav_num >= 10 or name.lower() == "dave" and age == 18:
@@ -281,5 +282,746 @@ elif friend is False and name.lower() == "dave":
     print("You can be my friend.")
 else:
     print("Bye")
+
+
+import random
+
+# 3.1
+# Comparisons:
+# Equal ==
+# Not Equal !=
+# Greater than >
+# Less than <
+# Greater or Equal >=
+# Less or Equal <=
+# Object idetity is
+name = "Anthony"
+if name == "Anthony":
+    print("Hello Anthony!")
+# 3.2
+# age = int(input("What is your age?: "))
+age = 16
+if age < 16:
+    print("you cant drive")
+elif age >= 16 and age <= 17:
+    print("you can drive but you can't vote")
+elif age >= 18 and age <= 20:
+    print("you can vote but not rent a car")
+else:
+    print("you can do pretty much anything")
+# 3.3
+# Boolean operators
+# and
+# or
+# not
+user = "admin"
+logged_in = False
+if user == "admin" and logged_in:
+    print("Admin Page")
+else:
+    print("insuficent creds")
+
+
+if not logged_in:
+    print("LOGIN!")
+else:
+    print("logged in")
+
+# 3.4
+question = input("What do you want to know?")
+
+x = random.randrange(1, 6) 
+
+response = ""
+
+if x == 1:
+    response = "no"
+elif x == 2:
+    response = "yes"
+elif x == 3:
+    response = "maybe"
+elif x == 4:
+    response = "I don't know"
+elif x == 5: 
+    response = "L"
+
+print(response)
+
+
+num = 30
+value = num > 12 #True
+if not value:
+    print("Not high enough")
+else:
+    print("Number is good")
+
+
+num = random.randrange(10)
+
+
+import random
+
+magic_num = random.randrange(1, 21)
+print(magic_num)
+
+
+# # 4.1
+
+# age = 18
+# while age == 18:
+#     print("You can vote")
+
+count = 1
+while count <= 5:
+    print(f"{count} Hello")
+    count += 1
+    # You can add count += 2 to count by 2
+
+# 4.2 (accumulator variables)
+count = 100
+total = 0
+while count <= 200:
+    print(count)
+    total += count
+    count += 1
+
+
+count1 = 200
+total1 = 0
+while count1 <= 300:
+    print(count1)
+    total1 += count1
+    count1 += 1
+
+
+diffrence = total - total1
+print(diffrence)
+
+count2 = 1000
+total2 = 0
+while count2 <= 10000:
+    count2 += 5
+    total2 += count2
+
+print(total2)
+
+count3 = 0
+total3 = 0
+while count3 <= 100:
+    if count3 % 3 == 0 and count3 % 5 != 0:
+        total3 += count3
+    count3 += 1
+
+print(total3)
+
+# 4.3 (input in a loop)
+
+nums = int(input("How many numbers do you have?: "))
+count3 = 0
+total3 = 0
+while count3 < nums:
+    num = int(input("Enter a number: "))
+    count3 += 1
+    total3 += num
+print(total3)
+
+losses = 0
+wins = 0
+count4 = 1
+while count4 <= 6:
+    score = input(f"did the team [w]in or [l]ose? in round {count4}: ").lower()
+    if score == "w":
+        wins += 1
+    elif score == "l":
+        losses += 1
+    else:
+        print("Invalid Option!")
+        continue
+    count4 += 1
+
+
+ratio = wins / losses
+print(f" your win/loss ratio is {round(ratio,1)}%")
+
+
+# 4.4 (break and continue)
+
+n = 5
+while n > 0:
+    n -= 1
+    if n == 2:
+        continue
+        # This makes the code go right back to the top of the loop
+    print(n)
+print("Loop is finished.")
+
+
+import random
+
+# 4.5 (Post-Test Loops)
+num = 7
+while True:
+    print(num)
+    num += 1
+    if num > 9:
+        break
+
+while True:
+    coin = random.randrange(2)
+    choice = input("Whould you like to flip a coin?(y/n):").lower()
+    if choice == "n":
+        break    
+    elif choice == "y":
+        if coin == 0:
+            print("Tails!")
+        elif coin == 1:
+            print("Heads!")
+    else:
+        print("Invalid option.")
+        continue
+print("Loop broken")
+
+
+x = float(input("enter"))
+print(x)
+
+print("""Test 
+I am a pro coder
+yes yes yes""")
+# 4.6 (For Loops)
+courses = ["Math", "Science", "Physics", "English"]
+for course in courses:
+    if course == "Science":
+        break
+    print(course, end=" ")
+print(" ")
+
+
+for a in range(10, -1, -1):
+    # When counting down use a number just below the one you want
+    print(a + 1)
+
+message = input("Enter a message to say 10 times:")
+for a in range(1, 11):
+    print(f"{a}: {message}")
+
+
+print("x     y")
+print("________")
+for x in range(-10, 11): 
+    if x == 10: 
+        print(f"{x}     {x**2}") 
+    else: 
+        print(f"{x}   {x**2}")
+        print(f"{x + 0.5}  {(x + 0.5)**2}")
+        # Use this if counting by halves
+
+for x in range(1, 21):
+    if x % 2 == 0:
+        print(f"{x} <")
+    else:
+        print(x)
+
+# 4.7 
+
+x = 0
+name = "Dave"
+for char in  name:
+    if char == "a":
+        print(f"An \"a\" has been detected! at index {x}")
+    print(char)
+    x += 1
+
+for x in range(len(name)):
+    char = name[x]
+    if char == "a":
+        print(f"An 'a' has been detected! at index {x}")
+    print(char)
+
+new_string = ""
+for char in name:
+        # if char == "a" or char == "e" or char == "i" or char == "o" or char == "u":
+        if char in "aeiou":
+            new_string += "-"
+        else:
+            new_string += char 
+print(new_string)
+
+# Homework
+
+message = "are you ready for this?"
+for i in range(len(message)):
+    print(f"{i} - {message[i]}")
+
+
+new = ""
+text = input("Enter text: ")
+for char in text:
+    new += char
+    new += char
+print(new)
+
+text1 = input("Enter text here: ")
+text2 = input("Enter text here: ")
+if text1[-3:] in text2 or text2[-3:] in text1:
+    print("True")
+else:
+    print("False")
+
+
+hi = " "
+hello = "How is everyone doing?"
+for num in range(len(hello)):
+    if hello[num] in "sognelc":
+        hi += "-"
+    else:
+        hi += hello[num]
+print(hi)
+
+
+while True:
+    text = input("Enter text: ")
+    if "xyz" in text and ".xyz" not in text:
+        print("True")
+    else:
+        print("False")
+    break
+
+name = input("Name: ").lower()
+for x in range(len(name)):
+    if name[x] == "b" and name[x+2] == "b":
+        print("Good")
+        break
+
+
+text1 = input("String1: ")
+text2 = input("String2: ")
+new = ""
+for x in range(len(text1)):
+    new += text1[x]
+    new += text2[x]
+print(new)
+
+new = ""
+string = input("Enter a string: ")
+num = int(input("Time repeated: "))
+for x in range(num):
+    new += string
+print(new)
+
+
+for x in range(1, 101):
+    if x % 3 == 0 and x % 5 == 0:
+        print("FizzBuzz")
+    elif x % 3 == 0:
+        print("Fizz")
+    elif x % 5 == 0:
+        print("Fuzz")
+    else:
+        print(x)
+
+total = 0
+end = int(input("What num to stop at?: "))
+for num in range(1, end + 1):
+    total += num
+print(f"The sum is {total}")
+
+
+import random
+
+
+# Mr Gallo wisdom:
+# He went to parent teacher interviews
+# Do work
+# He watched a video I think thesis: No kid should have a cellphone unil they reach high school
+# No social media bad for people, lots of arguments 
+
+message_string = ("Hello This Is Anthony")
+for i, word in enumerate(message_string.split(" ")):
+    print(f"{i} {word}")
+
+num = 6.384752
+print(round(num, -1))
+
+print(11//2)
+x = [1, 2]
+y = []
+y.append(x)
+print(y)
+
+for x in range(0, 21, 2):
+    print(x)
+
+
+a = [1, 40, 53]
+a.append(31)
+b = a
+b.append(20)
+a.append(1)
+print(a)
+print(b)
+
+
+
+# 5.1 Intro to lists
+my_list = [9, 8, 7, 6, 5, 4, 3, 2, 1]
+print(my_list[3])
+print(my_list[0])
+
+my_list.append(0)
+print(my_list)
+
+print(len(my_list))
+
+print(my_list[0:-1])
+print(my_list[0:-2])
+
+for x in my_list:
+    print(x)
+
+# Slicing
+print(my_list[1:3])
+print(my_list[0: :2])
+print(my_list[::-1])
+
+my_list[2] = 6
+my_list[3] += 2
+print(my_list)
+string_list = ["Hello", "I am..."]
+string_list[0] += " Anthony"
+string_list[1] = "How are you?"
+print(string_list)
+
+# Homeowrk
+# basic = []
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# basic.append(-113)
+# print(f"Slot 0 contains a {basic[0]}")
+# print(f"Slot 1 contains a {basic[1]}")
+# print(f"Slot 2 contains a {basic[2]}")
+# print(f"Slot 3 contains a {basic[3]}")
+# print(f"Slot 4 contains a {basic[4]}")
+# print(f"Slot 5 contains a {basic[5]}")
+# print(f"Slot 6 contains a {basic[6]}")
+# print(f"Slot 7 contains a {basic[7]}")
+# print(f"Slot 8 contains a {basic[8]}")
+# print(f"Slot 9 contains a {basic[9]}")
+
+# for i in range(len(basic)):
+#     print(f"Slot {i} contains a {basic[i]}")
+
+# basic = []
+# for _ in range(10):
+#     basic.append(random.randrange(1, 101))
+# for x in range(len(basic)):
+#     print(f"Slot {x} contains a {basic[x]}", end=" ")
+
+
+# 5.2
+numbers = []
+for n in range(5, 51, 3):
+    numbers.append(n)
+print(numbers)
+
+# numbers = []
+# for _ in range(3):
+#     num = int(input("Enter a number: "))
+#     numbers.append(num)
+# print(numbers)
+
+
+# for i in range(len(numbers)):
+#     print(f"Current number: {numbers[i]} at location {i}")
+#     num = input("Enter a new number if you wish to change or ENTER to not: ")
+#     if num != "":
+#         numbers[i] = int(num)
+# print(numbers)
+
+
+
+# Homework
+numbers = []
+numbers_1 = []
+for _ in range(10):
+    numbers.append(random.randrange(1, 101))
+for i in range(len(numbers)):
+    numbers_1.append(numbers[i])
+
+numbers[9] = -7
+
+print(numbers)
+print(numbers_1)
+
+# 5.3 
+friends = ["Tom", "Sally", "Jim", "Frank", "Teressa", "Timmy"]
+
+t_total = 0
+for friend in friends:
+    # t_total += friend.count("T")
+    if friend[0].lower() == "t":
+        t_total += 1
+print(t_total)
+
+# for i in range(len(friends)):
+#     if friends[i].lower() == "frank":
+#         print(f"Frank has been located at index {i} it has been changed to Franky")
+#         # friends[i] += "y"
+#         friends[i] = "Franky"
+#         break
+# print(friends)
+
+# Better way:
+found_index = None 
+for i, name in enumerate(friends):
+    print(i, name)
+    if name.lower() == "frank":
+        found_index = i
+        break
+
+friends[found_index] = "Frankey"
+print(friends)
+
+# Homework
+numbers = []
+for _ in range(10):
+    numbers.append(random.randrange(1, 51))
+print(numbers)
+
+num_find = int(input("What number to find: "))
+count = 0
+for n in numbers:
+    if n == num_find:
+        print(f"{num_find} is in the list")
+        count += 1
+    else:
+        print(f"{num_find} is not in the list")
+
+print(f"{num_find} was found {count} times")
+
+
+
+num_find = int(input("What number to find: "))
+for i, num in enumerate(numbers):
+    if num_find == num:
+        print(f"{num_find} was found in index {i}")
+
+
+marks = [86, 48, 78, 10, 60, 30]
+for i, mark in enumerate(marks):
+    if mark < 50:
+        marks[i] = 50
+print(marks)
+
+
+numbers = []
+for _ in range(10):
+    numbers.append(random.randrange(0, 101, 2))
+print(numbers)
+location = None
+high = 0
+for i, num in enumerate(numbers):
+    if num > high:
+        high = num
+        location = i
+print(f" The highest number is {high} at index: {location}")
+
+# names = ["Mitchell", "Ortiz", "Luu", "Zimmerman", "Brooks"]
+# avrage = [96.8, 78.5, 95.6, 96.8, 82.7]
+# id = [123456, 813225, 823669, 307760, 827131]
+# person = int(input("Enter your id"))
+# for i in range(len(id)):
+#     if id[i] == person:
+#         location = i
+# print(f"""Name: {names[location]}
+# Avrage: {avrage[location]}
+# ID: {id}""")
+
+
+# 5.4
+names_string = "Frank Sally Fred Frank Timmy"
+friends = []
+friends = names_string.split(" ")
+print(friends)
+
+num_string = "12 54 62 89 17 90"
+# numbers = num_string.split(" ")
+# If you do this it will make the numbers into srtings
+
+# total = 0
+# for num in numbers:
+#     total += int(num)
+# print(total)
+num_string = "12 54 62 89 17 90"
+numbers = []
+for num in num_string.split(" "):
+    print(num)
+    numbers.append(int(num))
+print(numbers)
+
+total = 0
+for num in numbers:
+    total += num
+print(f"The total is {total}")
+
+# Homework
+# 1.
+animals_names = "monkey bat cat dog"
+animals_list = []
+animals_list = animals_names.split(" ")
+for animal in animals_list:
+    print(animal, end=" ")
+print(" ")
+# 2.
+numbers_string = "65, 75, 32, 22"
+numbers_list = []
+for number in numbers_string.split(", "):
+    numbers_list.append(int(number))
+for i, number in enumerate(numbers_list):
+    print(f"{i}: {number}")
+# 3.
+numbers_words = "one,two,three,four"
+print(numbers_words)
+numbers = []
+for number in numbers_words.split(","):
+    if number.lower() == "zero":
+        numbers.append(0)
+    elif number.lower() == "one":
+        numbers.append(1)
+    elif number.lower() == "two":
+        numbers.append(2)
+    elif number.lower() == "three":
+        numbers.append(3)
+    elif number.lower() == "four":
+        numbers.append(4)
+    elif number.lower() == "five":
+        numbers.append(5)
+print(numbers)
+# 4.
+games = "W W L T T W"
+games_list = []
+games_list = games.split(" ")
+print(games_list)
+score = []
+for outcome in games_list:
+    print(outcome)
+    if outcome.upper() == "W":
+        score.append(2)
+    elif outcome == "L":
+        score.append(0)
+    elif outcome == "T":
+        score.append(1)
+print(score)
+
+# 5.
+x_coords = "x:3,x:6,x:14,x:22"
+x_values = x_coords.split(",")
+print(x_values)
+x = []
+for value in x_values:
+    specif_value = value.split(":")
+    print(specif_value)
+    x.append(int(specif_value[1]))
+print(x)
+
+# 6.
+# coords_list = "x:2,y:5 - x:5,y:11 - x:7,y:14"
+# test = []
+# final = []
+# x_y = cordinates.split(" - ")
+# print(x_y)   
+# for set in x_y:
+#     x_y = set.split(",")
+#     print(x_y)
+#     for set in x_y:
+#         test.append(int(set[2:]))
+#         if len(test) == 2:
+#             final.append(test)
+#             test = []  
+# print(final)
+coords_string = "x:2,y:5 - x:5,y:11 - x:7,y:14"
+coords_list = []
+for coords in coords_string.split(" - "):
+    coords_final = []
+    coords_cut = coords.split(",")
+
+    coords_x = coords_cut[0]
+    x_split = coords_x.split(":")
+    x_value = int(x_split[1])
+
+    coords_y = coords_cut[1]
+    y_split = coords_y.split(":")
+    y_value = int(y_split[1])
+
+
+    coords_final.append(x_value)
+    coords_final.append(y_value)
+    print(coords_final)
+
+    coords_list.append(coords_final)
+print(coords_list)
+
+
+
+
+
+
+
+# Lists Practice Quiz
+# 1.
+list = []
+list.append(float(input("Enter a float: ")))
+list.append(int(input("Enter a intiger: ")))
+list.append(input("Enter a string: "))
+print(list)
+# 2.
+colours = ["Red", "Blue", "Green", "Purple"]
+print(colours)
+colours[1] = "Yellow"
+print(colours)
+# 3.
+numbers = []
+for num in range(10):
+    numbers.append(random.randrange(1, 21))
+print(numbers)
+
+for i, num in enumerate(numbers):
+    if num % 2 != 0:
+        numbers[i] = -1
+print(numbers)
+# 4.
+names = []
+for x in range(5):
+    names.append(input("Enter a name: "))
+print(names)
+# 5.
+# squares = []
+# for num in range(1, 11):
+#     squares.append(num ** 2)
+# print(squares)
+
+numbers = []
+squares = []
+for num in range(1, 11):
+    numbers.append(num)
+print(numbers)
+for num in numbers:
+    squares.append(num ** 2)
+print(squares)
+# 6.
+numbers = []
+for x in range(7):
+    num = float(input("Enter a number: "))
+    if num % 2 == 0:
+        numbers.append(num)
+print(numbers)
+
 
 
