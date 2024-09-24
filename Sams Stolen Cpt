@@ -1,1 +1,490 @@
+import json
+import random
+import time
+import os
+
+
+surgery_cost = 10000
+def credits():
+    print("Thank you for playing")
+def surgery_goal():
+    global balance
+    print(f"Your current balance: {balance}")
+
+def show_goal_progress():
+    global balance
+    global surgery_cost
+    progress = min(100, (balance / surgery_cost) * 100)
+    print(f"Current goal: Save enough money to get surgery for your mom (${surgery_cost})")
+    print(f"Progress: ${balance} / ${surgery_cost} ({progress:.2f}%)")
+
+    if balance >= surgery_cost:
+        print("Congratulations! You've reached your goal.")
+        print(" ")
+        final_choice()
+
+def final_choice():
+    print(" ")
+    print("[1] Now do you want to spend your money lavishly")
+    print("[2] Or do you want to go see if you can buy your moms surgery.")
+    final_choice = int(input("Enter 1 for dealership or 2 for house: "))
+    if final_choice == 2:
+        Good_choice()
+        credits()
+    elif final_choice == 1:
+        Bad_choice()
+        credits()
+    else:
+        print("Invalid choice")
+
+def Good_choice():
+    global balance
+    print(" ")
+    time.sleep(3)
+    print("You decided to use your money to save your mom from various health issues.")
+    time.sleep(3)
+    print("You took her to the best doctors and provided the necessary medical treatments.")
+    time.sleep(3)
+    print("Your decision paid off, and your mom's health improved significantly.")
+    time.sleep(3)
+    print("You feel proud to have made a positive impact on her life.")
+    print(" ")
+    time.sleep(3)
+    print("...")
+    time.sleep(3)
+    print("Your still broke, but your mom is happy and now are you!")
+    exit()
+    
+def Bad_choice():
+    global balance
+    print(" ")
+    time.sleep(3)
+    print("Instead of helping your mom, you chose to indulge in luxury.")
+    time.sleep(3)
+    print("You spent a significant amount of money on expensive cars, parties, and other luxuries.")
+    time.sleep(3)
+    print("Now your mom's health has gotten worse and won't ever be able to fully recover.")
+    time.sleep(3)
+    print("If she ever does...")
+    time.sleep(3)
+    print("Now what? Are you happy?")
+    exit()
+
+def clear_console():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+
+def save_balance(balance):
+    with open("balance.json", "w") as f:
+        json.dump({'balance': balance}, f)
+
+def read_balance():
+    try:
+        with open("balance.json", "r") as f:
+            data = json.load(f)
+            return data['balance']
+    except FileNotFoundError:
+        return 20
+
+def afk_menu():
+    global balance
+
+    while True:
+        print("AFK Menu:")
+        print("1. Earn $3 every 30 seconds")
+        print("2. Exit AFK Menu")
+        choice = input("Enter your choice (1/2): ")
+        if choice == '1':
+            earn_money = True
+            while earn_money:
+                time.sleep(30)
+                balance += 3
+                save_balance(balance)
+                print(f"You earned $3 while AFK. Current balance: ${balance}")
+                stop_earning = input("Do you want to stop earning money? (yes/no): ").lower()
+                if stop_earning == 'yes':
+                    earn_money = False
+                    game_menu()
+                else:
+                    print("Resuming earning...")
+        elif choice == '2':
+            print("Exiting AFK Menu.")
+            break
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+
+def draw_card(rank, suit):
+    print("┌─────┐")
+    print(f"| {rank:<2}  |")
+    print("|     |")
+    print(f"|  {suit}  |")
+    print("|     |")
+    print(f"|  {rank:>2} |")
+    print("└─────┘")
+
+def calculate_total(hand):
+    values = {
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5,
+        '6': 6,
+        '7': 7,
+        '8': 8,
+        '9': 9,
+        '10': 10,
+        'J': 10,
+        'Q': 10,
+        'K': 10,
+        'A': 11
+    }
+    total = 0
+    ace_count = 0
+
+    for card in hand:
+        if card[0] == 'A':
+            ace_count += 1
+        total += values[card[0]]
+
+    while total > 21 and ace_count > 0:
+        total -= 10
+        ace_count -= 1
+
+    return total
+
+def create_deck():
+    ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+    suits = ['♠', '♥', '♦', '♣']
+    deck = [(rank, suit) for rank in ranks for suit in suits]
+    random.shuffle(deck)
+    return deck
+
+def deal_card(deck):
+    return deck.pop()
+
+def draw_symbol(symbol):
+    if symbol == '7':
+        print("7️⃣ ", end=' ')
+    elif symbol == 'Cherry':
+        print("🍒 ", end=' ')
+    elif symbol == 'Bar':
+        print("🧈 ", end=' ')
+    elif symbol == 'Bell':
+        print("🔔 ", end=' ')
+
+def play_blackjack():
+    global balance
+    print(" ")
+
+    while True:
+        try:
+            bet = int(input(f"What is your bet? (Current balance: {balance}): "))
+            if bet <= 0 or bet > balance:
+                print("Invalid bet amount. Please enter a valid bet.")
+            else:
+                break
+        except ValueError:
+            print("Invalid input. Please enter a valid number for your bet.")
+
+    deck = create_deck()
+    player_hand = [deal_card(deck), deal_card(deck)]
+    dealer_hand = [deal_card(deck)]
+
+    print("Your hand:")
+    for card in player_hand:
+        draw_card(*card)
+    print("Dealer's hand:")
+    draw_card(*dealer_hand[0])
+
+    while True:
+        player_total = calculate_total(player_hand)
+        if player_total == 21:
+            print("Blackjack! You win!")
+            balance += bet
+            break
+        elif player_total > 21:
+            print("Bust! You lose.")
+            balance -= bet
+            break
+
+        action = input("Do you want to hit or stand? (h/s): ").lower()
+        if action == 'h':
+            player_hand.append(deal_card(deck))
+            print("Your hand:")
+            for card in player_hand:
+                draw_card(*card)
+        elif action == 's':
+            while calculate_total(dealer_hand) < 17:
+                dealer_hand.append(deal_card(deck))
+            print("Dealer's hand:")
+            for card in dealer_hand:
+                draw_card(*card)
+            dealer_total = calculate_total(dealer_hand)
+            if dealer_total > 21:
+                print("Dealer busts! You win!")
+                balance += bet
+            elif dealer_total == player_total:
+                print("It's a tie!")
+            elif dealer_total < player_total:
+                print("You win!")
+                balance += bet
+            else:
+                print("Dealer wins!")
+                balance -= bet
+            break
+        else:
+            print("Invalid input. Please enter 'h' or 's'.")
+
+
+def coin_flip():
+    global balance
+
+    print("Coin Flip Game:")
+    print("1. Flip a coin and double your bet if you win")
+    print("2. Exit Coin Flip Game")
+
+    while True:
+        choice = input("Enter your choice (1/2): ")
+        if choice == '1':
+            bet = int(input(f"Enter your bet (Current balance: {balance}): "))
+            if bet <= 0 or bet > balance:
+                print("Invalid bet amount. Please enter a valid bet.")
+                continue
+
+            user_guess = input("Guess the result (Heads/Tails): ").lower()
+            print(f"You chose: {user_guess.capitalize()}")
+
+            if user_guess in ['h', 'heads', 'head']:
+                user_guess = 'Heads'
+            elif user_guess in ['t', 'tails', 'tail']:
+                user_guess = 'Tails'
+            else:
+                print(
+                    "Invalid choice. Please enter 'H', 'T', 'heads', 'tails', 'head', or 'tail'."
+                )
+                continue
+
+            result = random.choice(['Heads', 'Tails'])
+            print("Flipping the coin...")
+
+            time.sleep(1)
+
+            print("Result:", result)
+
+            print("   _____")
+            print(" /       \\")
+            print(f"|  {result}  |")
+            print("|    O    |")
+            print(" \\ _____ /")
+
+            if user_guess == result:
+                balance += bet
+                print(f"Congratulations! You won. Your balance is now ${balance}")
+            else:
+                balance = max(0, balance - bet)
+                print(f"Sorry, you lost ${bet}. Your balance is now ${balance}")
+
+            play_again = input("Do you want to play again? (yes/no): ").lower()
+            if play_again != 'yes':
+                return
+
+        elif choice == '2':
+            print("Exiting Coin Flip Game.")
+            return
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+
+def dice_roll():
+    global balance
+
+    print("Dice Roll Game:")
+    print("1. Roll the dice to make free money!")
+    print("2. Exit Dice Roll Game")
+
+    choice = input("Enter your choice (1/2): ")
+    if choice == '1':
+        bet = int(input(f"How much would you like to bet? (Current balance: {balance}):"))
+        if bet <= 0 or bet > balance:
+            print("Invalid bet amount. Please enter a valid bet.")
+            return
+
+        user_guess = int(input("Guess the dice roll (1-6): "))
+        if user_guess < 1 or user_guess > 6:
+            print("Invalid guess. Please enter a number between 1 and 6.")
+            return
+
+        dice_result = random.randint(1, 6)
+        print("Rolling the dice...")
+        time.sleep(1)
+        print(f"The dice rolled: {dice_result}")
+
+        if user_guess == dice_result:
+            balance += bet * 2
+            print(f"Congratulations! You guessed it right. You won! New balance: {balance}")
+        else:
+            balance -= bet
+            print(f"Sorry, you guessed it wrong. You lose. New balance: {balance}")
+    elif choice == '2':
+        print("Exiting Dice Roll Game.")
+    else:
+        print("Invalid choice")
+        return
+
+def slot_machine():
+    global balance
+
+    print("Welcome to the Slot Machine!")
+    if balance <= 0:
+        print("Sorry, you don't have enough money to play the slot machine.")
+        return
+
+    bet = int(input(f"How much would you like to bet? (Current balance: {balance}): "))
+    if bet <= 0 or bet > balance or not int:
+        print("Invalid bet amount. Please enter a valid bet.")
+        return
+
+    roll_input = input("Type 'roll' to spin the reels: ").lower()
+    if roll_input == 'roll':
+        symbols = ['7', 'Cherry', 'Bar', 'Bell']
+
+        print("Spinning the reels...")
+
+        reels = []
+
+        for _ in range(3):
+            time.sleep(1)
+            reels.append(random.choice(symbols))
+
+            print("\n")
+            for symbol in reels:
+                draw_symbol(symbol)
+                time.sleep(0.5)
+
+        print("\n")
+
+        if reels[0] == reels[1] == reels[2]:
+            print("Congratulations! You won!")
+            balance += bet * 2
+        else:
+            print("Sorry, you didn't win this time.")
+            balance -= bet
+    else:
+        print("Invalid input. Please type 'roll' to spin the reels.")
+
+def jackpot():
+    global balance
+
+    print("Jackpot Game:")
+    bet = int(input(f"How much would you like to bet? (Current balance: {balance}): "))
+    if bet <= 0 or bet > balance:
+        print("Invalid bet amount. Please enter a valid bet.")
+        return
+
+    if random.randint(1, 1000) == 1:
+        print("Congratulations! You hit the jackpot! You won a massive amount!")
+        balance += bet * 10000
+    else:
+        print("Sorry, you didn't hit the jackpot. Better luck next time.")
+        balance -= bet
+
+
+class CasinoColors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+    BOLD = '\033[1m'
+    END = '\033[0m'
+
+def game_menu():
+    global balance
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}┌──────────────────────────────────────────────────┐{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[1]. {CasinoColors.YELLOW}Blackjack                                   {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[2]. {CasinoColors.YELLOW}Coin Flip                                   {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[3]. {CasinoColors.YELLOW}Dice Roll                                   {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[4]. {CasinoColors.YELLOW}Slot Machine                                {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[J]. {CasinoColors.YELLOW}JACKPOT!!!                                  {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[A]. {CasinoColors.YELLOW}Afk                                         {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[B]. {CasinoColors.YELLOW}Balance                                     {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[S]. {CasinoColors.YELLOW}Save                                        {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[G]. {CasinoColors.YELLOW}Goal                                        {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}| {CasinoColors.GREEN}[C]. {CasinoColors.YELLOW}Clear console                               {CasinoColors.BLUE}|{CasinoColors.END}")
+    print(f"{CasinoColors.BLUE}{CasinoColors.BOLD}└──────────────────────────────────────────────────┘{CasinoColors.END}")
+
+    while True:
+        choice = input(f"{CasinoColors.MAGENTA}{CasinoColors.BOLD}Pick a game (1/2/3/4/J/A/B/S/G/C): {CasinoColors.END}")
+        if choice == '1':
+            play_blackjack()
+            break
+        elif choice == '2':
+            coin_flip()
+        elif choice == '3':
+            dice_roll()
+            break
+        elif choice == '4':
+            slot_machine()
+            break
+        elif choice.lower() == 'j':
+            jackpot()
+        elif choice.lower() == 'a':
+            afk_menu()
+        elif choice.lower() == 'b':
+            print(f'{CasinoColors.YELLOW}Your balance: {balance}{CasinoColors.END}')
+        elif choice.lower() == 's':
+            save_balance(balance)
+            print(f'{CasinoColors.GREEN}Balance saved. Current balance: {balance}{CasinoColors.END}')
+        elif choice.lower() =='g':
+            show_goal_progress()
+        elif choice.lower() == 'c':
+            clear_console()
+            break
+        else:
+            print(f"{CasinoColors.RED}Invalid choice. Please pick a game (1/2/3/4/A/B/J/S/G/C).{CasinoColors.END}")
+        
+
+try:
+    balance = read_balance()
+except FileNotFoundError:
+    balance = 20
+
+
+def get_character_name():
+    return input("Enter your character's name: ")
+
+character_name = get_character_name()
+
+print("┌—————————————————————————————————————————————————————————————————————┐")
+print("|       Damn I really should have paid attention in compsci           |")
+print("| Now I work at a Mcdonalds and dont have any money, what do I do now.|")
+print("|             Would you like to gamble your life away?(20$ broke Lmao)|")
+print("|               You have two choices: Yes or Yes.                     |")
+print("└—————————————————————————————————————————————————————————————————————┘")
+gamble_choice = input("                     Your choice (Yes/Yes):").lower()
+
+if gamble_choice == 'yes':
+    print("You've chosen to gamble your life away!")
+    print("Entering the Triple Diamond Casino Menu...")
+    game_menu()
+
+while True:
+    play_again = input("Do you want to play again? (yes/no):").lower()
+    if play_again != 'yes':
+        print("No, I haven't made enough money. I'm not a quitter!")
+        save_balance(balance)
+        game_menu()
+    elif play_again == 'yes':
+        game_menu()
+
+
+
+
+
+# In the balance.json file:
+{"balance": 600}
 
