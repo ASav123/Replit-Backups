@@ -1,0 +1,164 @@
+import manylines
+
+# Day 1 part 1
+
+# final_nums = []
+# lines_split = manylines.lines.split("\n")
+# print(lines_split)
+
+# for line in lines_split:
+#     all_nums = []
+#     first_last = ""
+#     for char in line:
+#         if char in "123456789":
+#             # print(char)
+#             all_nums.append(char)
+#     first_last += all_nums[0]
+#     first_last += all_nums[-1]
+#     final_nums.append(int(first_last))
+
+# total = 0
+# for num in final_nums:
+#     total += num
+
+# print(total)
+
+# part 2 something with .find ina  list
+
+# str_to_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+
+# final_nums = []
+
+# for line in lines_split:
+#     all_nums = []
+#     first_last = ""
+#     for length in range(len(line)):
+#         if length <= 4:
+#             part_of_line = line[0: length + 1]
+#         else:
+#             part_of_line = line[length - 4: length + 1]
+#         for num_check in range(10):
+#             if str_to_num[num_check] in part_of_line:
+#                 all_nums.append(num_check)
+#     print(all_nums)
+#     if len(all_nums) != 0:
+#         first_last += str(all_nums[0])
+#         first_last += str(all_nums[-1])
+#         final_nums.append(int(first_last))
+
+# total = 0
+# for num in final_nums:
+#     total += num
+
+# print(total)
+
+# str_to_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+
+# final_nums = []
+
+# for line in lines_split:
+#     print(line)
+#     all_nums = []
+#     first_last = ""
+#     for i, char in enumerate(line):
+#         if char in "0123456789":
+#             all_nums.append(char)
+#         elif char in "zotfsen": 
+#             for length in range(len(line)):
+#                 number_test = line[i:i + length]
+#                 print(number_test)
+#                 for num_check in range(10):
+#                     if str_to_num[num_check] in number_test:
+#                         all_nums.append(str(num_check))
+#                 if length >= 5:
+#                     break
+#     first_last += all_nums[0]
+#     first_last += all_nums[-1]
+#     print(first_last)
+#     final_nums.append(int(first_last))
+
+
+# total = 0
+# for num in final_nums:
+#     total += num
+
+# print(total)
+# I give up
+
+
+# Day 2 part 1
+# games_split = manylines.games.split("\n")
+
+# # as in total possible
+# total_red = 12
+# total_green = 13
+# total_blue = 14
+
+# possible_games = []
+
+# for game in games_split: # Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+#     real_game = True
+#     game_parts = game.split(": ") #["Game 1", "3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"]
+#     game_number = game_parts[0]
+#     actual_game_number = game_number[5:]  #each game id (every time it runs)
+#     seperate_draw = game_parts[1]
+#     for seperated_draw_split in seperate_draw.split("; "): # [3 blue, 4 red", "1 red, 2 green, 6 blue", "2 green"]
+#         for each_colour in seperated_draw_split.split(", "): # [3 blue]
+#             colour_number = each_colour.split(" ")
+#             if colour_number[1] == "blue":
+#                 if int(colour_number[0]) > total_blue:
+#                     real_game = False
+#             elif colour_number[1] == "green":
+#                 if int(colour_number[0]) > total_green:
+#                     real_game = False
+#             elif colour_number[1] == "red":
+#                 if int(colour_number[0]) > total_red:
+#                     real_game = False
+#     if real_game:
+#         possible_games.append(int(actual_game_number))
+#         print(actual_game_number)
+
+# total = 0
+# for num in possible_games:
+#     total += num
+# print(total)
+
+# Day 2 part 2
+games_split = manylines.games.split("\n")
+
+each_power = []
+
+for game in games_split: # Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+    minumum_red = 0
+    minumum_green = 0
+    minumum_blue = 0
+    
+    game_parts = game.split(": ") #["Game 1", "3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"]
+    game_number = game_parts[0]
+    actual_game_number = game_number[5:]  #each game id (every time it runs)
+    seperate_draw = game_parts[1]
+    for seperated_draw_split in seperate_draw.split("; "): # [3 blue, 4 red", "1 red, 2 green, 6 blue", "2 green"]
+        for each_colour in seperated_draw_split.split(", "): # [3 blue]
+            colour_number = each_colour.split(" ")
+            if colour_number[1] == "blue":
+                if int(colour_number[0]) > minumum_blue:
+                    minumum_blue = int(colour_number[0])
+            elif colour_number[1] == "green":
+                if int(colour_number[0]) > minumum_green:
+                    minumum_green = int(colour_number[0])
+            elif colour_number[1] == "red":
+                if int(colour_number[0]) > minumum_red:
+                    minumum_red = int(colour_number[0])
+    game_power = minumum_blue * minumum_green * minumum_red
+    each_power.append(game_power)
+
+total = 0
+for power in each_power:
+    total += power
+print(total)
+            
+        
+        
+    
+
+
